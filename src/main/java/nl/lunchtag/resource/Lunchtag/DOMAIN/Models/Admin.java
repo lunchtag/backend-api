@@ -51,8 +51,7 @@ public class Admin {
         return notification;
     }
 
-    public void removeNotifcationByID(long notificationID)
-    {
+    public void removeNotifcationByID(long notificationID) {
         notifications.remove(getNotificationByID(notificationID));
     }
 
