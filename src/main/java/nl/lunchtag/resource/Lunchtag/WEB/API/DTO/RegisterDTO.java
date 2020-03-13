@@ -1,5 +1,10 @@
 package nl.lunchtag.resource.Lunchtag.WEB.API.DTO;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class RegisterDTO {
 
     private String username;
