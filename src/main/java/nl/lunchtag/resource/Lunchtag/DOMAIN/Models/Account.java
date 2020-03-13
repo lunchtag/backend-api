@@ -34,6 +34,14 @@ public class Account {
                 .orElse(null);
         return lunch;
     }
+    public void removeLunchDayByID(long lunchID)
+    {
+        lunches.remove(getLunchByID(lunchID));
+    }
+    public Set<Lunch> getAllLunch()
+    {
+        return lunches;
+    }
 
 
 
