@@ -1,4 +1,4 @@
-package nl.lunchtag.resource.Lunchtag.entity;
+package nl.lunchtag.resource.Lunchtag.DOMAIN.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
