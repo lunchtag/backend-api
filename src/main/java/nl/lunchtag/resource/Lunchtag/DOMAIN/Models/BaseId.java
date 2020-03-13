@@ -12,7 +12,8 @@ import java.util.Date;
 import java.util.UUID;
 
 @MappedSuperclass
-@Getter @Setter
+@Getter
+@Setter
 abstract class BaseId {
     @Id
     @Type(type="uuid-char")

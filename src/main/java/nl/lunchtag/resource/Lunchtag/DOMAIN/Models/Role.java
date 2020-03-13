@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "role")
+@Table(name = "Role")
 @Getter
 @Setter
 public class Role extends BaseId implements Serializable {
