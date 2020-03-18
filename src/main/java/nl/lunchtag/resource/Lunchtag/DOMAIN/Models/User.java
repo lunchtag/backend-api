@@ -3,6 +3,7 @@ package nl.lunchtag.resource.Lunchtag.DOMAIN.Models;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class User {
     private String password;
     private String repeatedPassword;
     private List<Lunch> lunches = new ArrayList<>();
+
 
     public User(long userID, String name, String lastname, String email, String username, String password) {
         this.userID = userID;

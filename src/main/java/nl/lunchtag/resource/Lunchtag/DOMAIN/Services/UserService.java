@@ -15,8 +15,9 @@ public class UserService {
     private UserRepository userRepository;
     private LunchRepository lunchRepository;
 
-    public UserService(UserRepository repository) {
-        this.userRepository = repository;
+    public UserService(UserRepository userrepository, LunchRepository lunchRepository) {
+        this.userRepository = userrepository;
+        this.lunchRepository = lunchRepository;
     }
 
     public User getUserByID(long id) {
