@@ -3,7 +3,6 @@ package nl.lunchtag.resource.Lunchtag.DOMAIN.Models;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class User {
     private String username;
     private String password;
     private String repeatedPassword;
-    private List<Lunch> lunches = new ArrayList<>();
+    private List<LunchDate> lunchDates = new ArrayList<LunchDate>();
 
 
     public User(long userID, String name, String lastname, String email, String username, String password) {
@@ -30,21 +29,21 @@ public class User {
     }
 
 
-    public void addLunch(Lunch lunch)
+    public void addLunch(LunchDate lunchdate)
     {
-        lunches.add(lunch);
+        lunchDates.add(lunchdate);
     }
-    public Lunch getLunchByID(long lunchID)
+    public LunchDate getLunchDayByID(long lunchDayID)
     {
-        Lunch lunch = lunches.stream()
-                .filter( lunch1 -> lunchID == lunch1.getLunchID())
+        LunchDate date = lunchDates.stream()
+        .filter(lunchDate -> lunchDayID == lunchDate.getId())
                 .findFirst()
                 .orElse(null);
-        return lunch;
+        return date;
     }
 
     public void removeLunch(long lunchID)
     {
-        lunches.remove(getLunchByID(lunchID));
+        lunchDates.remove(getLunchDayByID(lunchID));
     }
 }
