@@ -30,4 +30,11 @@ public class UserService {
         user.addLunch(lunch);
         lunchRepository.save(lunch);
     }
+
+    public void removeLunch(long userID, long lunchID)
+    {
+        User user = getUserByID(userID);
+        user.removeLunch(lunchID);
+    }
+
 }

@@ -32,4 +32,17 @@ public class User {
     {
         lunches.add(lunch);
     }
+    public Lunch getLunchByID(long lunchID)
+    {
+        Lunch lunch = lunches.stream()
+                .filter( lunch1 -> lunchID == lunch1.getLunchID())
+                .findFirst()
+                .orElse(null);
+        return lunch;
+    }
+
+    public void removeLunch(long lunchID)
+    {
+        lunches.remove(getLunchByID(lunchID));
+    }
 }
