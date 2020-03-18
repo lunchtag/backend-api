@@ -10,6 +10,5 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class LunchDTO {
-    private long lunchID;
     private Date date;
 }
