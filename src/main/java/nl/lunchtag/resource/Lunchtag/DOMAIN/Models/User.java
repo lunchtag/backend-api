@@ -10,7 +10,6 @@ public class User {
     private String repeatedPassword;
 
 
-
     public User(long userID, String name, String lastname, String email, String username, String password) {
         this.userID = userID;
         this.name = name;

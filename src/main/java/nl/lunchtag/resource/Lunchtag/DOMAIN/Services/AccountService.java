@@ -31,12 +31,18 @@ public class AccountService {
         return accountRepository.findById(accountID).orElseThrow(() -> new NotFoundException("Not found"));
     }
 
-    public void addLunchDate(long userID, LunchDTO lunchDTO) {
-
+    public Lunch addLunchDate(long accountID, LunchDTO lunchDTO) {
+        Lunch lunch = new Lunch();
+        lunch.setDate(lunchDTO.getDate());
+        Account account = getAccountByID(accountID);
+        account.addLunch(lunch);
+        lunchRepository.save(lunch);
+        return lunch;
     }
 
     public void removeLunch(long userID, long lunchID) {
-
+        Account account = getAccountByID(userID);
+        account.removeLunchDayByID(lunchID);
     }
 
     public Set<Lunch> getAllLunches(long accountID) {
