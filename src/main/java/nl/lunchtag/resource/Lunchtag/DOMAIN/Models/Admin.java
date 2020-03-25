@@ -19,21 +19,21 @@ public class Admin {
     }
 
 
-    public User getUserByID(long userID) {
-        User user = users.stream()
-                .filter(user1 -> userID == user1.getUserID())
-                .findFirst()
-                .orElse(null);
-        return user;
-    }
+//    public User getUserByID(long userID) {
+//        User user = users.stream()
+//                .filter(user1 -> userID == user1)
+//                .findFirst()
+//                .orElse(null);
+//        return user;
+//    }
 
     public void addUser(User user) {
         users.add(user);
     }
 
-    public void removeUser(long userID) {
-        users.remove(getUserByID(userID));
-    }
+//    public void removeUser(long userID) {
+//        users.remove(getUserByID(userID));
+//    }
 
     public Set<User> getAllUsers() {
         return users;
