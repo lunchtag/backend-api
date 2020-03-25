@@ -16,7 +16,7 @@ public class User {
     private String username;
     private String password;
     private String repeatedPassword;
-    private List<LunchDate> lunchDates = new ArrayList<LunchDate>();
+    private List<LunchDate> lunchDates = new ArrayList<>();
 
 
     public User(long userID, String name, String lastname, String email, String username, String password) {
@@ -33,6 +33,7 @@ public class User {
     {
         lunchDates.add(lunchdate);
     }
+
     public LunchDate getLunchDayByID(long lunchDayID)
     {
         LunchDate date = lunchDates.stream()
