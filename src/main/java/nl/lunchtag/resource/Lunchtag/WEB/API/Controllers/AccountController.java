@@ -2,7 +2,6 @@ package nl.lunchtag.resource.Lunchtag.WEB.API.Controllers;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import nl.lunchtag.resource.Lunchtag.DOMAIN.Models.Account;
 import nl.lunchtag.resource.Lunchtag.DOMAIN.Models.Lunch;
 import nl.lunchtag.resource.Lunchtag.DOMAIN.Services.AccountService;
 import nl.lunchtag.resource.Lunchtag.WEB.API.DTO.LunchDTO;
@@ -10,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @Api(tags = "Accounts")
 @RestController
@@ -35,4 +36,12 @@ public class AccountController {
         accountService.removeLunch(accountID, lunchID);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
+
+    @ApiOperation(value = "GetAllLunches")
+    @GetMapping("/acounts/{accountID}/lunches")
+    public ResponseEntity<Set<Lunch>> getAllLunches(@PathVariable long accountID) {
+        Set<Lunch> list = accountService.getAllLunches(accountID);
+        return ResponseEntity.status(HttpStatus.CREATED).body(list);
+    }
+
 }
