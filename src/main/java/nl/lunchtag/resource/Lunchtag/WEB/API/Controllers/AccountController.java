@@ -2,6 +2,8 @@ package nl.lunchtag.resource.Lunchtag.WEB.API.Controllers;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import nl.lunchtag.resource.Lunchtag.DOMAIN.Models.Lunch;
 import nl.lunchtag.resource.Lunchtag.DOMAIN.Services.AccountService;
 import nl.lunchtag.resource.Lunchtag.WEB.API.DTO.LunchDTO;
@@ -22,23 +24,26 @@ public class AccountController {
         this.accountService = accountService;
     }
 
+
     @ApiOperation(value = "AddLunch")
-    @PostMapping("/acounts/{accountID}/lunches")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK!, Succesfull")
+    })
+    @PostMapping("/accounts/{accountID}/lunches")
     public ResponseEntity<Lunch> addLunch(@RequestBody LunchDTO lunchDTO, @PathVariable long accountID) {
-      Lunch lunch =  accountService.addLunchDate(accountID, lunchDTO);
+        Lunch lunch = accountService.addLunchDate(accountID, lunchDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(lunch);
     }
 
     @ApiOperation(value = "RemoveLunch")
     @DeleteMapping("/accounts/{accountID}/lunches/lunchID")
-    public ResponseEntity<Lunch> removeLunch(@PathVariable long accountID, long lunchID)
-    {
+    public ResponseEntity<Lunch> removeLunch(@PathVariable long accountID, long lunchID) {
         accountService.removeLunch(accountID, lunchID);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @ApiOperation(value = "GetAllLunches")
-    @GetMapping("/acounts/{accountID}/lunches")
+    @GetMapping("/accounts/{accountID}/lunches")
     public ResponseEntity<Set<Lunch>> getAllLunches(@PathVariable long accountID) {
         Set<Lunch> list = accountService.getAllLunches(accountID);
         return ResponseEntity.status(HttpStatus.CREATED).body(list);
