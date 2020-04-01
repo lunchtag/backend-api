@@ -1,21 +1,62 @@
 package nl.lunchtag.resource.Lunchtag.DOMAIN.Models;
 
-public class User {
-    private long userID;
-    private String name;
-    private String lastname;
-    private String email;
-    private String username;
-    private String password;
-    private String repeatedPassword;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import nl.lunchtag.resource.Lunchtag.DOMAIN.Models.enums.Role;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.UUID;
 
-    public User(long userID, String name, String lastname, String email, String username, String password) {
-        this.userID = userID;
-        this.name = name;
-        this.lastname = lastname;
-        this.email = email;
-        this.username = username;
-        this.password = password;
+@Data
+public class User implements UserDetails {
+    private UUID id;
+    private String userName;
+    private String firstName;
+    private String lastName;
+    private Role role;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority(role.toString()));
+    }
+
+    @JsonIgnore
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getUsername() {
+        return this.userName;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isEnabled() {
+        return false;
     }
 }

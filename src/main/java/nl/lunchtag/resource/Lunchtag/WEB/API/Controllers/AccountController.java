@@ -23,7 +23,7 @@ public class AccountController {
     }
 
     @ApiOperation(value = "AddLunch")
-    @PostMapping("/acounts/{accountID}/lunches")
+    @PostMapping("/accounts/{accountID}/lunches")
     public ResponseEntity<Lunch> addLunch(@RequestBody LunchDTO lunchDTO, @PathVariable long accountID) {
       Lunch lunch =  accountService.addLunchDate(accountID, lunchDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(lunch);
@@ -38,7 +38,7 @@ public class AccountController {
     }
 
     @ApiOperation(value = "GetAllLunches")
-    @GetMapping("/acounts/{accountID}/lunches")
+    @GetMapping("/accounts/{accountID}/lunches")
     public ResponseEntity<Set<Lunch>> getAllLunches(@PathVariable long accountID) {
         Set<Lunch> list = accountService.getAllLunches(accountID);
         return ResponseEntity.status(HttpStatus.CREATED).body(list);
