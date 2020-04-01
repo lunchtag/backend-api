@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import nl.lunchtag.resource.Lunchtag.DOMAIN.Models.User;
+import nl.lunchtag.resource.Lunchtag.DOMAIN.Models.enums.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,10 +37,15 @@ public class TokenProvider {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("username", String.class);
     }
 
+    private String getRole(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("role", String.class);
+    }
+
     public Authentication getAuthentication(String token) {
         User user = new User();
         user.setId(getID(token));
         user.setUserName(getUsername(token));
+        user.setRole(Role.valueOf(getRole(token)));
 
         return new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());
     }
