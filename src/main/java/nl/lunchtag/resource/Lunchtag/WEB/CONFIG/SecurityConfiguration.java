@@ -1,7 +1,6 @@
 package nl.lunchtag.resource.Lunchtag.WEB.CONFIG;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -39,6 +38,13 @@ protected void configure(HttpSecurity http) throws Exception{
     // Allow all to h2 (maybe not best but for development)
     http.authorizeRequests().antMatchers("/h2/**").permitAll();
     http.authorizeRequests().antMatchers("/console/**").permitAll();
+    http.authorizeRequests().antMatchers("/swagger-ui.html/**").permitAll();
+    http.authorizeRequests().antMatchers("/api/**").permitAll();
+    http.authorizeRequests().antMatchers("/swagger-resources/**").permitAll();
+    http.authorizeRequests().antMatchers("/v2/api-docs/**").permitAll();
+    http.authorizeRequests().antMatchers("/webjars/**").permitAll();
+
+
 
     // All other endpoints are blocked if no valid token is provided.
     http.authorizeRequests().anyRequest().authenticated();
