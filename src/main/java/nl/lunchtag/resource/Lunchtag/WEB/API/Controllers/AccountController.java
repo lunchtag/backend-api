@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Api(tags = "Accounts")
@@ -42,11 +43,19 @@ public class AccountController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
-    @ApiOperation(value = "GetAllLunches")
+    @ApiOperation(value = "GetAllLunchesByID")
     @GetMapping("/accounts/{accountID}/lunches")
-    public ResponseEntity<Set<Lunch>> getAllLunches(@PathVariable long accountID) {
-        Set<Lunch> list = accountService.getAllLunches(accountID);
+    public ResponseEntity<Set<Lunch>> getAllLunchesByID(@PathVariable long accountID) {
+        Set<Lunch> list = accountService.getAllLunchesByID(accountID);
         return ResponseEntity.status(HttpStatus.CREATED).body(list);
     }
+
+    @ApiOperation(value = "GetAllLunches")
+    @GetMapping("/lunches")
+    public ResponseEntity<List<Lunch>> getAllLunches() {
+        List<Lunch> list = accountService.getALlLunches();
+        return ResponseEntity.status(HttpStatus.CREATED).body(list);
+    }
+
 
 }

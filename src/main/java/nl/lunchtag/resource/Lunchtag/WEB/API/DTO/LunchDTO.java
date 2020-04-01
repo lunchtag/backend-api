@@ -10,5 +10,6 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class LunchDTO {
+    private String name;
     private Date date;
 }
