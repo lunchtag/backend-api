@@ -10,6 +10,7 @@ import nl.lunchtag.resource.Lunchtag.WEB.API.DTO.LunchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,6 +57,12 @@ public class AccountController {
         List<Lunch> list = accountService.getALlLunches();
         return ResponseEntity.status(HttpStatus.CREATED).body(list);
     }
+
+//-	Als medewerker wil ik een overzicht zien van wanneer ik heb mee geluncht zodat ik kan zien of ik vergeten ben een dag in te vullen.
+//
+//-	Als medewerker wil ik kunnen aangeven wanneer ik heb mee geluncht zodat de secretaresse dit weet.
+
+    //-	Als medewerker wil ik een overzicht van mijn geschiedenis kunnen zien zodat ik weet of ik alle data correct heb ingevuld.
 
 
 }
