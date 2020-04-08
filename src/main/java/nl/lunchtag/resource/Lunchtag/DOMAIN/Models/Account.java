@@ -11,13 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-<<<<<<< HEAD
-import java.util.ArrayList;
-=======
 import java.util.*;
->>>>>>> dbb14d693a9b985c044efbca6b0a032cae618aca
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -32,42 +27,23 @@ public class Account implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonIgnore
     private UUID accountID;
-
     private String name;
-<<<<<<< HEAD
-//    private String lastname;
-//    private String email;
-//    private String username;
-//    private String password;
-=======
     private String lastName;
     private String email;
-
     @JsonIgnore
     private String password;
     private Role role = Role.USER;
 
->>>>>>> dbb14d693a9b985c044efbca6b0a032cae618aca
-
-
-    private List<Account> accounts = new ArrayList<>();
     @OneToMany(fetch = FetchType.EAGER,
-                cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL)
     private Set<Lunch> lunches = new HashSet<>();
 
     public Account(UUID accountID, String name, String lastName, String email, String password) {
         this.accountID = accountID;
         this.name = name;
-<<<<<<< HEAD
-//        this.lastname = lastname;
-//        this.email = email;
-//        this.username = username;
-//        this.password = password;
-=======
         this.lastName = lastName;
         this.email = email;
         this.password = password;
->>>>>>> dbb14d693a9b985c044efbca6b0a032cae618aca
     }
 
     public void addLunch(Lunch lunch) {
@@ -106,12 +82,6 @@ public class Account implements UserDetails {
         return true;
     }
 
-<<<<<<< HEAD
-    public void register(Account account)
-    {
-        accounts.add(account);
-    }
-=======
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
@@ -131,5 +101,4 @@ public class Account implements UserDetails {
     }
 
 
->>>>>>> dbb14d693a9b985c044efbca6b0a032cae618aca
 }
