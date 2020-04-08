@@ -1,10 +1,7 @@
 package nl.lunchtag.resource.Lunchtag.WEB.CONFIG.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import nl.lunchtag.resource.Lunchtag.DOMAIN.Models.User;
+import io.jsonwebtoken.*;
+import nl.lunchtag.resource.Lunchtag.DOMAIN.Models.Account;
 import nl.lunchtag.resource.Lunchtag.DOMAIN.Models.enums.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,9 +39,9 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        User user = new User();
-        user.setId(getID(token));
-        user.setUserName(getUsername(token));
+        Account user = new Account();
+        user.setAccountID(getID(token));
+        user.setEmail(getUsername(token));
         user.setRole(Role.valueOf(getRole(token)));
 
         return new UsernamePasswordAuthenticationToken(user, "", user.getAuthorities());
@@ -65,5 +62,20 @@ public class TokenProvider {
         } catch(JwtException | IllegalArgumentException e) {
             throw new IllegalArgumentException("Invalid JWT");
         }
+    }
+
+    public String createToken(UUID username, String firstName, String lastName, Role role) {
+        Claims claims = Jwts.claims().setSubject(username.toString());
+        claims.put("username", firstName + " " + lastName);
+        claims.put("role", role);
+
+        Date now = new Date();
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + validityInMilliseconds))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @Getter
@@ -28,11 +29,11 @@ public class AccountService {
         this.lunchRepository = lunchRepository;
     }
 
-    public Account getAccountByID(long accountID) {
+    public Account getAccountByID(UUID accountID) {
         return accountRepository.findById(accountID).orElseThrow(() -> new NotFoundException("Not found"));
     }
 
-    public Lunch addLunchDate(long accountID, LunchDTO lunchDTO) {
+    public Lunch addLunchDate(UUID accountID, LunchDTO lunchDTO) {
         Lunch lunch = new Lunch();
         lunch.setDate(lunchDTO.getDate());
         Account account = getAccountByID(accountID);
@@ -41,13 +42,13 @@ public class AccountService {
         return lunch;
     }
 
-    public void removeLunch(long userID, long lunchID) {
+    public void removeLunch(UUID userID, long lunchID) {
         Account account = getAccountByID(userID);
         account.removeLunchDayByID(lunchID);
     }
 
-    public Set<Lunch> getAllLunchesByID(long accountID) {
-        return getAccountByID(accountID).getAllLunch();
+    public Set<Lunch> getAllLunchesByID(UUID accountID) {
+        return getAccountByID(accountID).getLunches();
     }
 
     public List<Lunch> getALlLunches()

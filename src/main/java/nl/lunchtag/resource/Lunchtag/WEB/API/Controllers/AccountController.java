@@ -10,11 +10,11 @@ import nl.lunchtag.resource.Lunchtag.WEB.API.DTO.LunchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Api(tags = "Accounts")
 @RestController
@@ -32,30 +32,30 @@ public class AccountController {
             @ApiResponse(code = 200, message = "OK!, Succesfull")
     })
     @PostMapping("/accounts/{accountID}/lunches")
-    public ResponseEntity<Lunch> addLunch(@RequestBody LunchDTO lunchDTO, @PathVariable long accountID) {
+    public ResponseEntity<Lunch> addLunch(@RequestBody LunchDTO lunchDTO, @PathVariable UUID accountID) {
         Lunch lunch = accountService.addLunchDate(accountID, lunchDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(lunch);
     }
 
     @ApiOperation(value = "RemoveLunch")
     @DeleteMapping("/accounts/{accountID}/lunches/lunchID")
-    public ResponseEntity<Lunch> removeLunch(@PathVariable long accountID, long lunchID) {
+    public ResponseEntity<Lunch> removeLunch(@PathVariable UUID accountID, long lunchID) {
         accountService.removeLunch(accountID, lunchID);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @ApiOperation(value = "GetAllLunchesByID")
     @GetMapping("/accounts/{accountID}/lunches")
-    public ResponseEntity<Set<Lunch>> getAllLunchesByID(@PathVariable long accountID) {
+    public ResponseEntity<Set<Lunch>> getAllLunchesByID(@PathVariable UUID accountID) {
         Set<Lunch> list = accountService.getAllLunchesByID(accountID);
-        return ResponseEntity.status(HttpStatus.CREATED).body(list);
+        return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
     @ApiOperation(value = "GetAllLunches")
     @GetMapping("/lunches")
     public ResponseEntity<List<Lunch>> getAllLunches() {
         List<Lunch> list = accountService.getALlLunches();
-        return ResponseEntity.status(HttpStatus.CREATED).body(list);
+        return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
 //-	Als medewerker wil ik een overzicht zien van wanneer ik heb mee geluncht zodat ik kan zien of ik vergeten ben een dag in te vullen.
