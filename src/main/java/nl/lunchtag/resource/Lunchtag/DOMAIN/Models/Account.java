@@ -5,7 +5,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -20,12 +22,13 @@ public class Account {
     private long accountID;
 
     private String name;
-    private String lastname;
-    private String email;
-    private String username;
-    private String password;
+//    private String lastname;
+//    private String email;
+//    private String username;
+//    private String password;
 
 
+    private List<Account> accounts = new ArrayList<>();
     @OneToMany(fetch = FetchType.EAGER,
                 cascade = CascadeType.ALL)
     private Set<Lunch> lunches = new HashSet<>();
@@ -33,10 +36,10 @@ public class Account {
     public Account(long accountID, String name, String lastname, String email, String username, String password) {
         this.accountID = accountID;
         this.name = name;
-        this.lastname = lastname;
-        this.email = email;
-        this.username = username;
-        this.password = password;
+//        this.lastname = lastname;
+//        this.email = email;
+//        this.username = username;
+//        this.password = password;
     }
 
     public void addLunch(Lunch lunch) {
@@ -57,5 +60,10 @@ public class Account {
 
     public Set<Lunch> getAllLunch() {
         return lunches;
+    }
+
+    public void register(Account account)
+    {
+        accounts.add(account);
     }
 }
