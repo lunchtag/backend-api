@@ -7,9 +7,9 @@ spring:
     application:
         name: backend-api
     datasource:
-        url: jdbc:mysql://localhost/lunchtagresource?serverTimezone=UTC
-        username: root
-        password:
+        url: jdbc:sqlserver://fhictodin.database.windows.net:1433;database=Lunchtag
+        username: odin2001@fhictodin
+        password: ICTiscool123
         driver-class-name: com.mysql.cj.jdbc.Driver
     jpa:
         show-sql: true
