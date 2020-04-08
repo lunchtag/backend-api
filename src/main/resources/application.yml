@@ -10,7 +10,7 @@ spring:
         url: jdbc:sqlserver://fhictodin.database.windows.net:1433;database=Lunchtag
         username: odin2001@fhictodin
         password: ICTiscool123
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
     jpa:
         show-sql: true
         hibernate:
