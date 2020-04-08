@@ -45,6 +45,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers("/swagger-resources/**").permitAll()
                     .antMatchers("/v2/api-docs/**").permitAll()
                     .antMatchers("/webjars/**").permitAll()
+                    .antMatchers("/auth/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                 .apply(new TokenConfigurer(tokenProvider));
