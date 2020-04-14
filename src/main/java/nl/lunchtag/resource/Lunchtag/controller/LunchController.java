@@ -1,0 +1,93 @@
+package nl.lunchtag.resource.Lunchtag.controller;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import nl.lunchtag.resource.Lunchtag.controller.enums.LunchResponse;
+import nl.lunchtag.resource.Lunchtag.entity.Account;
+import nl.lunchtag.resource.Lunchtag.entity.Lunch;
+import nl.lunchtag.resource.Lunchtag.logic.LunchLogic;
+import nl.lunchtag.resource.Lunchtag.models.LunchDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Api(tags = "Accounts")
+@RequestMapping(value = "/lunch")
+@RestController
+public class LunchController {
+    private LunchLogic lunchLogic;
+
+    @Autowired
+    public LunchController(LunchLogic lunchLogic) {
+        this.lunchLogic = lunchLogic;
+    }
+
+    @ApiOperation(value = "AddLunch")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK!, Succesfull")
+    })
+    @PostMapping
+    public ResponseEntity addLunch(@AuthenticationPrincipal Account account, @RequestBody LunchDTO lunchDTO) {
+        Lunch lunch = this.lunchLogic.addLunch(account, lunchDTO);
+
+        if(lunch != null) {
+            return ResponseEntity.ok(lunch);
+        }
+
+        return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ApiOperation(value = "getLunch")
+    @GetMapping("/{lunchId}")
+    public ResponseEntity getLunch(@PathVariable String lunchId) {
+        Optional<Lunch> lunch = this.lunchLogic.findById(UUID.fromString(lunchId));
+
+        if(lunch.isPresent()) {
+            return ResponseEntity.ok(lunch.get());
+        }
+
+        return new ResponseEntity<>(LunchResponse.NO_LUNCH.toString(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ApiOperation(value = "GetAllLunches")
+    @GetMapping
+    public ResponseEntity getAllLunches(@AuthenticationPrincipal Account account) {
+        List<Lunch> lunches = this.lunchLogic.findAllByAccountId(account.getId());
+
+        if(!lunches.isEmpty()) {
+            return ResponseEntity.ok(lunches);
+        }
+
+        return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ApiOperation(value = "getGlobalLunches")
+    @GetMapping("/all")
+    public ResponseEntity getGlobalLunches() {
+        List<Lunch> lunches = this.lunchLogic.findAll();
+
+        if(!lunches.isEmpty()) {
+            return ResponseEntity.ok(lunches);
+        }
+
+        return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ApiOperation(value = "RemoveLunch")
+    @DeleteMapping("/{lunchId}")
+    public ResponseEntity removeLunch(@AuthenticationPrincipal Account account, @PathVariable String lunchId) {
+        if (lunchLogic.deleteLunch(UUID.fromString(lunchId), account.getId())) {
+            return ResponseEntity.ok("Deleted");
+        }
+
+        return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
+    }
+}
