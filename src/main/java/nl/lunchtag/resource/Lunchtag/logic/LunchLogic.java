@@ -35,8 +35,8 @@ public class LunchLogic {
         return lunch;
     }
 
-    public boolean deleteLunch(UUID id, UUID accountId) {
-        Optional<Lunch> lunch = this.lunchService.findByIdAndAccountId(id, accountId);
+    public boolean deleteLunch(UUID id) {
+        Optional<Lunch> lunch = this.lunchService.findById(id);
 
         if(lunch.isPresent()) {
             this.lunchService.delete(lunch.get());

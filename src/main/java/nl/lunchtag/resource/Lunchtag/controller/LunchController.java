@@ -89,7 +89,7 @@ public class LunchController {
     @DeleteMapping("/{lunchId}")
     public ResponseEntity removeLunch(@AuthenticationPrincipal Account account, @PathVariable String lunchId) {
         try {
-            if (lunchLogic.deleteLunch(UUID.fromString(lunchId), account.getId())) {
+            if (lunchLogic.deleteLunch(UUID.fromString(lunchId))) {
                 return ResponseEntity.ok("Deleted");
             }
         } catch(Exception e) {
