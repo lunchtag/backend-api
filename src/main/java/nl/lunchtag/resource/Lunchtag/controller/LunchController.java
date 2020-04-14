@@ -9,6 +9,8 @@ import nl.lunchtag.resource.Lunchtag.entity.Account;
 import nl.lunchtag.resource.Lunchtag.entity.Lunch;
 import nl.lunchtag.resource.Lunchtag.logic.LunchLogic;
 import nl.lunchtag.resource.Lunchtag.models.LunchDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ import java.util.UUID;
 @RequestMapping(value = "/lunch")
 @RestController
 public class LunchController {
+    private Logger logger = LoggerFactory.getLogger(LunchController.class);
+
     private LunchLogic lunchLogic;
 
     @Autowired
@@ -84,8 +88,13 @@ public class LunchController {
     @ApiOperation(value = "RemoveLunch")
     @DeleteMapping("/{lunchId}")
     public ResponseEntity removeLunch(@AuthenticationPrincipal Account account, @PathVariable String lunchId) {
-        if (lunchLogic.deleteLunch(UUID.fromString(lunchId), account.getId())) {
-            return ResponseEntity.ok("Deleted");
+        try {
+            if (lunchLogic.deleteLunch(UUID.fromString(lunchId), account.getId())) {
+                return ResponseEntity.ok("Deleted");
+            }
+        } catch(Exception e) {
+            logger.error("User {} gave error {}", account.getEmail(), e);
+            return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
