@@ -7,10 +7,10 @@ spring:
     application:
         name: backend-api
     datasource:
-        url: jdbc:sqlserver://fhictodin.database.windows.net:1433;database=Lunchtag
-        username: odin2001@fhictodin
-        password: ICTiscool123
-        driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+        url: ec2-54-228-251-117.eu-west-1.compute.amazonaws.com
+        username: hsdbkqkaqypwqf
+        password: a12a51e6c53de176b29c24174a70454e312249f3be82adbcd6da1c181f8e0f3c
+        driver-class-name: org.postgresql.Driver
     jpa:
         show-sql: true
         hibernate:
