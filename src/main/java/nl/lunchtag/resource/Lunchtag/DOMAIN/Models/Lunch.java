@@ -17,7 +17,7 @@ public class Lunch {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long lunchID;
     private Date date;
-    
+
     @ManyToOne(fetch = FetchType.LAZY) // ophalen wanneerje erna vraagt
     private Account account;
 }

@@ -38,10 +38,10 @@ public class AccountController {
     }
 
     @ApiOperation(value = "RemoveLunch")
-    @DeleteMapping("/accounts/{accountID}/lunches/lunchID")
-    public ResponseEntity<Lunch> removeLunch(@PathVariable UUID accountID, long lunchID) {
+    @DeleteMapping("/accounts/{accountID}/lunches/{lunchID}")
+    public ResponseEntity removeLunch(@PathVariable UUID accountID, @PathVariable long lunchID) {
         accountService.removeLunch(accountID, lunchID);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        return ResponseEntity.ok("Deleted");
     }
 
     @ApiOperation(value = "GetAllLunchesByID")
