@@ -19,6 +19,5 @@ public class Lunch {
     private Date date;
     @JsonIgnore //als ik t ophaal wordt bank genegeerd in json
     @ManyToOne(fetch = FetchType.LAZY) // ophalen wanneerje erna vraagt
-    @JoinColumn(name = "Account_ID")
     private Account account;
 }
