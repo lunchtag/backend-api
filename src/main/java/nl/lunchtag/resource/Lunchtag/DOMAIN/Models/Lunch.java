@@ -17,7 +17,7 @@ public class Lunch {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long lunchID;
     private Date date;
-    @JsonIgnore //als ik t ophaal wordt bank genegeerd in json
+    
     @ManyToOne(fetch = FetchType.LAZY) // ophalen wanneerje erna vraagt
     private Account account;
 }
