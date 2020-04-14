@@ -40,7 +40,7 @@ public class AccountController {
     @ApiOperation(value = "RemoveLunch")
     @DeleteMapping("/accounts/{accountID}/lunches/{lunchID}")
     public ResponseEntity removeLunch(@PathVariable UUID accountID, @PathVariable long lunchID) {
-        accountService.removeLunch(accountID, lunchID);
+        accountService.removeLunch(lunchID);
         return ResponseEntity.ok("Deleted");
     }
 

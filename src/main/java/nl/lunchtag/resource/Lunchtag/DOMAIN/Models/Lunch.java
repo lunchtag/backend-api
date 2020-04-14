@@ -12,7 +12,6 @@ import java.util.Date;
 @Setter
 @Table(name = "Lunch")
 public class Lunch {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long lunchID;

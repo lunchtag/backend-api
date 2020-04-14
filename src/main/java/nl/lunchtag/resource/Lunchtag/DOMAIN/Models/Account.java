@@ -27,11 +27,16 @@ public class Account implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonIgnore
     private UUID accountID;
+
     private String name;
+
     private String lastName;
+
     private String email;
+
     @JsonIgnore
     private String password;
+
     private Role role = Role.USER;
 
     @OneToMany(fetch = FetchType.EAGER,
@@ -62,13 +67,11 @@ public class Account implements UserDetails {
         lunches.remove(getLunchByID(lunchDayID));
     }
 
-
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role.toString()));
     }
-
 
     @JsonIgnore
     @Override

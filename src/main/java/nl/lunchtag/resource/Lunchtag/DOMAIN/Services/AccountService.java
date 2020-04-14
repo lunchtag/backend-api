@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -42,9 +43,9 @@ public class AccountService {
         return lunch;
     }
 
-    public void removeLunch(UUID userID, long lunchID) {
-        Account account = getAccountByID(userID);
-        account.removeLunchDayByID(lunchID);
+    public void removeLunch(long lunchID) {
+        Optional<Lunch> lunch = lunchRepository.findById(lunchID);
+        lunch.ifPresent(value -> lunchRepository.delete(value));
     }
 
     public Set<Lunch> getAllLunchesByID(UUID accountID) {
@@ -55,5 +56,4 @@ public class AccountService {
     {
         return lunchRepository.findAll();
     }
-
 }
