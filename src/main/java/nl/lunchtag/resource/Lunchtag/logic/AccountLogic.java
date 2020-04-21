@@ -25,4 +25,10 @@ public class AccountLogic {
 
         return Integer.parseInt(formatted);
     }
+
+    public Boolean isPincodeMatch(Integer pincode) {
+        Optional<Account> foundAccount = this.accountService.findByPincode(pincode);
+
+        return foundAccount.isPresent();
+    }
 }

@@ -7,6 +7,7 @@ import nl.lunchtag.resource.Lunchtag.models.LoginDTO;
 import nl.lunchtag.resource.Lunchtag.models.RegisterDTO;
 import nl.lunchtag.resource.Lunchtag.config.jwt.TokenProvider;
 import nl.lunchtag.resource.Lunchtag.logic.Exceptions.AuthResponse;
+import nl.lunchtag.resource.Lunchtag.models.pincodeDTO;
 import nl.lunchtag.resource.Lunchtag.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,28 @@ public class AuthController {
         this.accountService = accountService;
         this.passwordHelper = passwordHelper;
         this.accountLogic = accountLogic;
+    }
+
+    @PostMapping("/pincode")
+    public ResponseEntity loginByPincode(@Valid @RequestBody pincodeDTO pincodeModel) {
+        Optional<Account> user = accountService.findAccountByEmail(pincodeModel.getEmail());
+
+        if(!user.isPresent()) {
+            return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        if(!this.accountLogic.isPincodeMatch(pincodeModel.getPincode())) {
+            return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            Map<Object, Object> model = new LinkedHashMap<>();
+            model.put("token", tokenProvider.createToken(user.get().getId(), user.get().getName(), user.get().getLastName(), user.get().getRole()));
+            model.put("user", user.get());
+            return ok(model);
+        } catch(AuthenticationException ex) {
+            return new ResponseEntity<>(AuthResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/login")
@@ -83,6 +106,7 @@ public class AuthController {
             Map<Object, Object> model = new LinkedHashMap<>();
             model.put("token", tokenProvider.createToken(createdUser.getId(), createdUser.getName(), createdUser.getLastName(), createdUser.getRole()));
             model.put("user", createdUser);
+            model.put("pincode", createdUser.getPincode());
             return ok(model);
         } catch(Exception ex) {
             return new ResponseEntity<>(AuthResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
