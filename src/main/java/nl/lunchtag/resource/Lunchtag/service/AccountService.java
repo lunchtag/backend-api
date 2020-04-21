@@ -5,6 +5,7 @@ import nl.lunchtag.resource.Lunchtag.respository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,6 +20,10 @@ public class AccountService {
 
     public Optional<Account> findAccountByEmail(String email) {
         return this.accountRepository.findAccountByEmail(email);
+    }
+
+    public List<Account> getAllUsers() {
+        return this.accountRepository.findAll();
     }
 
     public Account createOrUpdate(Account account) {
