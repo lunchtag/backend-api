@@ -21,7 +21,7 @@ public class AccountLogic {
         SecureRandom random = new SecureRandom();
 
         Integer newPincode = random.nextInt(100000);
-        String formatted = String.format("%05d", newPincode);
+        String formatted = String.format("%04d", newPincode);
 
         return Integer.parseInt(formatted);
     }
