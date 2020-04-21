@@ -1,8 +1,6 @@
 package nl.lunchtag.resource.Lunchtag.controller;
 
-import io.swagger.models.Response;
 import nl.lunchtag.resource.Lunchtag.controller.enums.AccountResponse;
-import nl.lunchtag.resource.Lunchtag.controller.enums.LunchResponse;
 import nl.lunchtag.resource.Lunchtag.entity.Account;
 import nl.lunchtag.resource.Lunchtag.entity.Lunch;
 import nl.lunchtag.resource.Lunchtag.logic.LunchLogic;
@@ -13,14 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -52,6 +45,24 @@ public class AccountController {
         }
 
         return ResponseEntity.ok(userList);
+    }
+
+    @GetMapping("/getSingleUser/{accountId}")
+    public ResponseEntity getSingleUserById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String accountId){
+        Account account = accountService.getUserById(UUID.fromString(accountId));
+
+        if(account == null){
+            return new ResponseEntity<>(AccountResponse.NO_ACCOUNTS, HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok(account);
+    }
+
+    @DeleteMapping("/deleteSingleUser/{accountId}")
+    public ResponseEntity removeUserById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String accountId){
+        accountService.removeUserById(UUID.fromString(accountId));
+
+        return ResponseEntity.ok("Deleted");
     }
 
     @GetMapping("/alluserlunches")

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AccountService {
@@ -24,6 +25,14 @@ public class AccountService {
 
     public List<Account> getAllUsers() {
         return this.accountRepository.findAll();
+    }
+
+    public Account getUserById(UUID id){
+        return this.accountRepository.getOne(id);
+    }
+
+    public void removeUserById(UUID id){
+        this.accountRepository.deleteById(id);
     }
 
     public Account createOrUpdate(Account account) {
