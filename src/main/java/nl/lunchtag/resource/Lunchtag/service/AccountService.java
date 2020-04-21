@@ -24,4 +24,9 @@ public class AccountService {
     public Account createOrUpdate(Account account) {
         return this.accountRepository.save(account);
     }
+
+    public Optional<Account> findByPincode(Integer pincode) {
+        return this.accountRepository.findByPincode(pincode);
+    }
+
 }

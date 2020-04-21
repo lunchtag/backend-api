@@ -1,6 +1,7 @@
 package nl.lunchtag.resource.Lunchtag.controller;
 
 import nl.lunchtag.resource.Lunchtag.entity.Account;
+import nl.lunchtag.resource.Lunchtag.logic.AccountLogic;
 import nl.lunchtag.resource.Lunchtag.logic.PasswordHelper;
 import nl.lunchtag.resource.Lunchtag.models.LoginDTO;
 import nl.lunchtag.resource.Lunchtag.models.RegisterDTO;
@@ -29,12 +30,14 @@ public class AuthController {
     private final TokenProvider tokenProvider;
     private final AccountService accountService;
     private final PasswordHelper passwordHelper;
+    private final AccountLogic accountLogic;
 
     @Autowired
-    public AuthController(TokenProvider tokenProvider, AccountService accountService, PasswordHelper passwordHelper) {
+    public AuthController(TokenProvider tokenProvider, AccountService accountService, PasswordHelper passwordHelper, AccountLogic accountLogic) {
         this.tokenProvider = tokenProvider;
         this.accountService = accountService;
         this.passwordHelper = passwordHelper;
+        this.accountLogic = accountLogic;
     }
 
     @PostMapping("/login")
@@ -75,6 +78,8 @@ public class AuthController {
             user.setPassword(passwordHelper.hash(registerModel.getPassword()));
 
             Account createdUser = accountService.createOrUpdate(user);
+
+            this.accountLogic.generatePincode(createdUser);
 
             Map<Object, Object> model = new LinkedHashMap<>();
             model.put("token", tokenProvider.createToken(createdUser.getId(), createdUser.getName(), createdUser.getLastName(), createdUser.getRole()));
