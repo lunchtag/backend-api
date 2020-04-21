@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.lunchtag.resource.Lunchtag.entity.enums.Role;
+import org.apache.commons.lang3.RandomUtils;
 import org.hibernate.annotations.Type;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,6 +32,11 @@ public class Account extends BaseId implements UserDetails, Serializable {
 
     @JsonIgnore
     private String password;
+
+    @JsonIgnore
+    private Integer pincode;
+
+    private Boolean isNonLocked = true;
 
     private Role role = Role.USER;
 
@@ -63,7 +70,7 @@ public class Account extends BaseId implements UserDetails, Serializable {
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.isNonLocked;
     }
 
     @JsonIgnore
