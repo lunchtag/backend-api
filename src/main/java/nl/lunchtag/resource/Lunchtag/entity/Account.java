@@ -7,6 +7,7 @@ import lombok.Setter;
 import nl.lunchtag.resource.Lunchtag.entity.enums.Role;
 import org.apache.commons.lang3.RandomUtils;
 import org.hibernate.annotations.Type;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,8 +47,6 @@ public class Account extends BaseId implements UserDetails, Serializable {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-
-        this.pincode = RandomUtils.nextInt(1, 7);
     }
 
     @JsonIgnore

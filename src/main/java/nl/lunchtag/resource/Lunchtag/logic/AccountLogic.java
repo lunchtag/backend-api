@@ -2,10 +2,10 @@ package nl.lunchtag.resource.Lunchtag.logic;
 
 import nl.lunchtag.resource.Lunchtag.entity.Account;
 import nl.lunchtag.resource.Lunchtag.service.AccountService;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.security.SecureRandom;
 import java.util.Optional;
 
 @Component
@@ -17,22 +17,12 @@ public class AccountLogic {
         this.accountService = accountService;
     }
 
-    public Boolean generatePincode(Account account) {
-        Optional<Account> foundAccount = this.accountService.findAccountByEmail(account.getEmail());
+    public Integer generatePincode() {
+        SecureRandom random = new SecureRandom();
 
-        if(foundAccount.isPresent()) {
-            while (true) {
-                Integer newPincode = RandomUtils.nextInt(1, 7);
-                Optional<Account> pincodeCheck = this.accountService.findByPincode(newPincode);
+        Integer newPincode = random.nextInt(100000);
+        String formatted = String.format("%05d", newPincode);
 
-                if(!pincodeCheck.isPresent()) {
-                    foundAccount.get().setPincode(newPincode);
-                    this.accountService.createOrUpdate(foundAccount.get());
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return Integer.parseInt(formatted);
     }
 }

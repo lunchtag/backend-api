@@ -76,10 +76,9 @@ public class AuthController {
             user.setName(registerModel.getFirstName());
             user.setLastName(registerModel.getLastName());
             user.setPassword(passwordHelper.hash(registerModel.getPassword()));
+            user.setPincode(this.accountLogic.generatePincode());
 
             Account createdUser = accountService.createOrUpdate(user);
-
-            this.accountLogic.generatePincode(createdUser);
 
             Map<Object, Object> model = new LinkedHashMap<>();
             model.put("token", tokenProvider.createToken(createdUser.getId(), createdUser.getName(), createdUser.getLastName(), createdUser.getRole()));
