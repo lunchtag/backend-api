@@ -52,6 +52,7 @@ public class Account extends BaseId implements UserDetails, Serializable {
     public Account(UUID accountId){
         this.setId(accountId);
     }
+
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
