@@ -26,11 +26,13 @@ import static org.springframework.http.ResponseEntity.ok;
 public class AccountController {
     private final AccountService accountService;
     private final LunchLogic lunchLogic;
+    private final AccountLogic accountLogic;
 
     @Autowired
-    public AccountController(AccountService accountService, LunchLogic lunchLogic) {
+    public AccountController(AccountService accountService, LunchLogic lunchLogic, AccountLogic accountLogic) {
         this.accountService = accountService;
         this.lunchLogic = lunchLogic;
+        this.accountLogic = accountLogic;
     }
 
     @GetMapping
