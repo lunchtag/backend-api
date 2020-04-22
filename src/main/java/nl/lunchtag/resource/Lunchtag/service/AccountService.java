@@ -38,4 +38,12 @@ public class AccountService {
     public Account createOrUpdate(Account account) {
         return this.accountRepository.save(account);
     }
+
+    public Optional<Account> findByPincode(Integer pincode) {
+        return this.accountRepository.findByPincode(pincode);
+    }
+
+    public Optional<Account> findById(UUID id) {
+        return this.accountRepository.findById(id);
+    }
 }

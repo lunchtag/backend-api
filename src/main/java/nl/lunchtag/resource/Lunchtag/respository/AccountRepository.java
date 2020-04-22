@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface AccountRepository extends JpaRepository<Account, UUID> {
     Optional<Account> findAccountByEmail(String email);
+    Optional<Account> findByPincode(Integer pincode);
 }
