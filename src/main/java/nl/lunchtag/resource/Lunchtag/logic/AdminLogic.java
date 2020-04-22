@@ -8,6 +8,8 @@ import nl.lunchtag.resource.Lunchtag.service.LunchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 public class AdminLogic {
 
@@ -20,15 +22,16 @@ public class AdminLogic {
         this.lunchService = lunchService;
     }
 
-    public Lunch addLunch(Account account, LunchDTO lunchDTO) {
+    public Lunch addLunch(String accountId, LunchDTO lunchDTO) {
         // Create new Lunch Instance
+
+        Account account = new Account(UUID.fromString(accountId));
         Lunch lunch = new Lunch(lunchDTO.getDate(), account);
 
         // Add lunch to database
-        this.adminService.createOrUpdate(lunch);
+        this.lunchService.createOrUpdate(lunch);
 
         // Return lunch instance
         return lunch;
-
     }
 }

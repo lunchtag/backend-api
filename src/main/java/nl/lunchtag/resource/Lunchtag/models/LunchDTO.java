@@ -11,4 +11,5 @@ import java.util.Date;
 @NoArgsConstructor
 public class LunchDTO {
     private Date date;
+    
 }

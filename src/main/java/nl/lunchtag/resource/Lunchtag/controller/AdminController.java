@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Api(tags = "Admin")
 @RestController
@@ -33,9 +30,9 @@ public class AdminController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK!, Succesfull")
     })
-    @PostMapping(value = "/lunch")
-    public ResponseEntity addLunch(@AuthenticationPrincipal Account account, @RequestBody LunchDTO lunchDTO) {
-        Lunch lunch = this.adminLogic.addLunch(account, lunchDTO);
+    @PostMapping(value = "/lunch/{accountId}")
+    public ResponseEntity addLunch(@AuthenticationPrincipal Account account, @RequestBody LunchDTO lunchDTO, @PathVariable String accountId) {
+        Lunch lunch = this.adminLogic.addLunch(accountId, lunchDTO);
 
         if(lunch != null) {
             return ResponseEntity.ok(lunch);
