@@ -49,6 +49,18 @@ public class LunchController {
         return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
     }
 
+    @ApiOperation(value = "getLunchesByAccountId")
+    @GetMapping("/account/{accountId}")
+    public ResponseEntity getLunchesByAccount(@PathVariable String accountId) {
+        List<Lunch> lunches = this.lunchLogic.findAllByAccountId(UUID.fromString(accountId));
+
+        if(!lunches.isEmpty()) {
+            return ResponseEntity.ok(lunches);
+        }
+
+        return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
+    }
+
     @ApiOperation(value = "getLunch")
     @GetMapping("/{lunchId}")
     public ResponseEntity getLunch(@PathVariable String lunchId) {

@@ -28,6 +28,7 @@ public class AdminController {
     public AdminController(AdminLogic adminLogic) {
         this.adminLogic = adminLogic;
     }
+
     @ApiOperation(value = "AddLunchAdmin")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK!, Succesfull")

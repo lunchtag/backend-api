@@ -1,5 +1,6 @@
 package nl.lunchtag.resource.Lunchtag.logic;
 
+
 import nl.lunchtag.resource.Lunchtag.controller.enums.AdminResponse;
 import nl.lunchtag.resource.Lunchtag.entity.Account;
 import nl.lunchtag.resource.Lunchtag.entity.Lunch;
@@ -8,8 +9,8 @@ import nl.lunchtag.resource.Lunchtag.service.LunchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.stereotype.Component;
-
 import java.util.Optional;
+import nl.lunchtag.resource.Lunchtag.service.AdminService;
 import java.util.UUID;
 
 @Component
