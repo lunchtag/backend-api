@@ -53,6 +53,10 @@ public class AuthController {
             return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
         }
 
+        if(!user.get().isAccountNonLocked()) {
+            return new ResponseEntity<>(AuthResponse.DISABLED.toString(), HttpStatus.BAD_REQUEST);
+        }
+
         try {
             Map<Object, Object> model = new LinkedHashMap<>();
             model.put("token", tokenProvider.createToken(user.get().getId(), user.get().getName(), user.get().getLastName(), user.get().getRole()));
@@ -74,6 +78,10 @@ public class AuthController {
         String password = user.get().getPassword();
         if(!this.passwordHelper.isMatch(loginModel.getPassword(), password)) {
             return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        if(!user.get().isAccountNonLocked()) {
+            return new ResponseEntity<>(AuthResponse.DISABLED.toString(), HttpStatus.BAD_REQUEST);
         }
 
         try {

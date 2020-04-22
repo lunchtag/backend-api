@@ -1,16 +1,15 @@
-package nl.lunchtag.resource.Lunchtag.logic.Exceptions;
+package nl.lunchtag.resource.Lunchtag.controller.enums;
 
-public enum AuthResponse {
+public enum AccountResponse {
     INVALID_PARAMS("Invalid parameters"),
     UNEXPECTED_ERROR("A unexpected error occurred. Try again later"),
     WRONG_CREDENTIALS("Wrong credentials"),
-    USER_ALREADY_EXISTS("A user with this email already exists"),
-    NO_PREMISSIONS("No Premission to execute"),
-    DISABLED("Your account has been disabled");
+    NO_ACCOUNTS("No Accounts were found"),
+    NO_ACCOUNT("No Account was found");
 
     private final String text;
 
-    AuthResponse(final String text) {
+    AccountResponse(final String text) {
         this.text = text;
     }
 

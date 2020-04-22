@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AccountService {
@@ -29,4 +30,7 @@ public class AccountService {
         return this.accountRepository.findByPincode(pincode);
     }
 
+    public Optional<Account> findById(UUID id) {
+        return this.accountRepository.findById(id);
+    }
 }
