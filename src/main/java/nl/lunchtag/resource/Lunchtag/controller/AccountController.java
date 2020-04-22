@@ -8,6 +8,7 @@ import nl.lunchtag.resource.Lunchtag.entity.Lunch;
 import nl.lunchtag.resource.Lunchtag.logic.LunchLogic;
 import nl.lunchtag.resource.Lunchtag.models.AccountLunchDTO;
 
+import nl.lunchtag.resource.Lunchtag.models.AccountUpdateDTO;
 import nl.lunchtag.resource.Lunchtag.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,17 @@ public class AccountController {
     public ResponseEntity disableUser(@Valid @PathVariable String accountId) {
         if(this.accountLogic.disableAccount(UUID.fromString(accountId))) {
             return ok("Successfully disabled");
+        }
+
+        return new ResponseEntity<>(AccountResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping
+    public ResponseEntity updateUser(@AuthenticationPrincipal Account account, @RequestBody AccountUpdateDTO accountUpdateDTO) {
+        Account updatedAccount = this.accountLogic.updateUser(account,accountUpdateDTO);
+
+        if(updatedAccount != null) {
+            return ok(updatedAccount);
         }
 
         return new ResponseEntity<>(AccountResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);

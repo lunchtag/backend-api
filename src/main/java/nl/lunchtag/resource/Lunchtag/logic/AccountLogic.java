@@ -1,6 +1,7 @@
 package nl.lunchtag.resource.Lunchtag.logic;
 
 import nl.lunchtag.resource.Lunchtag.entity.Account;
+import nl.lunchtag.resource.Lunchtag.models.AccountUpdateDTO;
 import nl.lunchtag.resource.Lunchtag.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
@@ -49,5 +50,33 @@ public class AccountLogic {
         }
 
         return false;
+    }
+
+    public Account updateUser(Account account, AccountUpdateDTO accountUpdateDTO) {
+        Optional<Account> foundAccount = this.findById(account.getId());
+
+        if(foundAccount.isPresent()) {
+            if(accountUpdateDTO.getPassword() != null) {
+                account.setPassword(accountUpdateDTO.getPassword());
+            }
+
+            if(accountUpdateDTO.getFirstName() != null) {
+                account.setName(accountUpdateDTO.getFirstName());
+            }
+
+            if(accountUpdateDTO.getLastName() != null) {
+                account.setLastName(accountUpdateDTO.getLastName());
+            }
+
+            if(accountUpdateDTO.getPincode() != null) {
+                account.setPincode(accountUpdateDTO.getPincode());
+            }
+
+            this.accountService.createOrUpdate(foundAccount.get());
+
+            return foundAccount.get();
+        }
+
+        return null;
     }
 }
