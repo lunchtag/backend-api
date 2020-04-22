@@ -43,4 +43,7 @@ public class AccountService {
         return this.accountRepository.findByPincode(pincode);
     }
 
+    public Optional<Account> findById(UUID id) {
+        return this.accountRepository.findById(id);
+    }
 }

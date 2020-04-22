@@ -5,7 +5,8 @@ public enum AuthResponse {
     UNEXPECTED_ERROR("A unexpected error occurred. Try again later"),
     WRONG_CREDENTIALS("Wrong credentials"),
     USER_ALREADY_EXISTS("A user with this email already exists"),
-    NO_PREMISSIONS("No Premission to execute");
+    NO_PREMISSIONS("No Premission to execute"),
+    DISABLED("Your account has been disabled");
 
     private final String text;
 
