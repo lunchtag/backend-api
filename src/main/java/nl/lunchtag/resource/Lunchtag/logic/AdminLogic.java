@@ -38,7 +38,7 @@ public class AdminLogic {
 
     public AdminResponse deleteLunch(String lunchId) {
         Optional<Lunch> lunch = this.lunchService.findById(UUID.fromString(lunchId));
-        if(lunch.isEmpty()){
+        if(lunch == null){
             return AdminResponse.NO_LUNCH;
         }
 
