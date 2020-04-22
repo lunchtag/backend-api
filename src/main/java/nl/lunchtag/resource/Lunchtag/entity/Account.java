@@ -42,6 +42,10 @@ public class Account extends BaseId implements UserDetails, Serializable {
         this.password = password;
     }
 
+    public Account(UUID id){
+        setId(id);
+    }
+
     @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
