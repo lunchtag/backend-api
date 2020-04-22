@@ -34,6 +34,7 @@ public class AccountController {
     public ResponseEntity currentUser(@AuthenticationPrincipal UserDetails userDetails) {
         Map<Object, Object> model = new LinkedHashMap<>();
         model.put("user", userDetails);
+        model.put("disabled", userDetails.isAccountNonLocked());
         return ok(model);
     }
 
