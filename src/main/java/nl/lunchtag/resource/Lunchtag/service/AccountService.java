@@ -5,6 +5,7 @@ import nl.lunchtag.resource.Lunchtag.respository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,6 +21,18 @@ public class AccountService {
 
     public Optional<Account> findAccountByEmail(String email) {
         return this.accountRepository.findAccountByEmail(email);
+    }
+
+    public List<Account> getAllUsers() {
+        return this.accountRepository.findAll();
+    }
+
+    public Account getUserById(UUID id){
+        return this.accountRepository.getOne(id);
+    }
+
+    public void removeUserById(UUID id){
+        this.accountRepository.deleteById(id);
     }
 
     public Account createOrUpdate(Account account) {
