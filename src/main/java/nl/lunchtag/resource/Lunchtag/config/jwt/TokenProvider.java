@@ -3,6 +3,8 @@ package nl.lunchtag.resource.Lunchtag.config.jwt;
 import io.jsonwebtoken.*;
 import nl.lunchtag.resource.Lunchtag.entity.Account;
 import nl.lunchtag.resource.Lunchtag.entity.enums.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +17,8 @@ import java.util.UUID;
 
 @Component
 public class TokenProvider {
+
+    Logger logger = LoggerFactory.getLogger(this.getClass());
     @Value("${JWT_SECRET_KEY:verysecretkey}")
     private String secretKey;
 
@@ -60,6 +64,7 @@ public class TokenProvider {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
         } catch(JwtException | IllegalArgumentException e) {
+            logger.error(e.getMessage());
             throw new IllegalArgumentException("Invalid JWT");
         }
     }
