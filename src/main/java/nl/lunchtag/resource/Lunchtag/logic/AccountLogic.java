@@ -57,19 +57,19 @@ public class AccountLogic {
 
         if(foundAccount.isPresent()) {
             if(accountUpdateDTO.getPassword() != null) {
-                account.setPassword(accountUpdateDTO.getPassword());
+                foundAccount.get().setPassword(accountUpdateDTO.getPassword());
             }
 
             if(accountUpdateDTO.getFirstName() != null) {
-                account.setName(accountUpdateDTO.getFirstName());
+                foundAccount.get().setName(accountUpdateDTO.getFirstName());
             }
 
             if(accountUpdateDTO.getLastName() != null) {
-                account.setLastName(accountUpdateDTO.getLastName());
+                foundAccount.get().setLastName(accountUpdateDTO.getLastName());
             }
 
             if(accountUpdateDTO.getPincode() != null) {
-                account.setPincode(accountUpdateDTO.getPincode());
+                foundAccount.get().setPincode(accountUpdateDTO.getPincode());
             }
 
             this.accountService.createOrUpdate(foundAccount.get());
