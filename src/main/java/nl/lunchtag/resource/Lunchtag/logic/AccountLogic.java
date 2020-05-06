@@ -52,8 +52,8 @@ public class AccountLogic {
         return false;
     }
 
-    public Account updateUser(Account account, AccountUpdateDTO accountUpdateDTO) {
-        Optional<Account> foundAccount = this.findById(account.getId());
+    public Account updateUser(UUID accountId, AccountUpdateDTO accountUpdateDTO) {
+        Optional<Account> foundAccount = this.findById(accountId);
 
         if(foundAccount.isPresent()) {
             if(accountUpdateDTO.getPassword() != null) {
