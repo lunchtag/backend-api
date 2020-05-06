@@ -55,7 +55,18 @@ public class AccountController {
 
     @PutMapping
     public ResponseEntity updateUser(@AuthenticationPrincipal Account account, @RequestBody AccountUpdateDTO accountUpdateDTO) {
-        Account updatedAccount = this.accountLogic.updateUser(account,accountUpdateDTO);
+        Account updatedAccount = this.accountLogic.updateUser(account.getId(),accountUpdateDTO);
+
+        if(updatedAccount != null) {
+            return ok(updatedAccount);
+        }
+
+        return new ResponseEntity<>(AccountResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("/update/{accountId}")
+    public ResponseEntity updateUser(@PathVariable String accountId, @RequestBody AccountUpdateDTO accountUpdateDTO) {
+        Account updatedAccount = this.accountLogic.updateUser(UUID.fromString(accountId),accountUpdateDTO);
 
         if(updatedAccount != null) {
             return ok(updatedAccount);
