@@ -1,18 +1,18 @@
-#server:
-#    port: 7575
-## =======================================
-## = Spring Configuration
-## =======================================
-#spring:
-#    application:
-#        name: backend-api
-#    datasource:
-#        url: ec2-54-228-251-117.eu-west-1.compute.amazonaws.com
-#        username: hsdbkqkaqypwqf
-#        password: a12a51e6c53de176b29c24174a70454e312249f3be82adbcd6da1c181f8e0f3c
-#        driver-class-name: org.postgresql.Driver
-#    jpa:
-#        show-sql: true
-#        hibernate:
-#            ddl-auto: update
-#        properties:hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
+server:
+    port: 7575
+# =======================================
+# = Spring Configuration
+# =======================================
+spring:
+    application:
+        name: backend-api
+    datasource:
+        url: ec2-54-228-251-117.eu-west-1.compute.amazonaws.com
+        username: hsdbkqkaqypwqf
+        password: a12a51e6c53de176b29c24174a70454e312249f3be82adbcd6da1c181f8e0f3c
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+        properties:hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
