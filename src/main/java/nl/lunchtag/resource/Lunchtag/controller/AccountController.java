@@ -13,6 +13,7 @@ import nl.lunchtag.resource.Lunchtag.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -44,6 +45,7 @@ public class AccountController {
         return ok(model);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/disable/{accountId}")
     public ResponseEntity disableUser(@Valid @PathVariable String accountId) {
         if(this.accountLogic.disableAccount(UUID.fromString(accountId))) {
@@ -64,6 +66,7 @@ public class AccountController {
         return new ResponseEntity<>(AccountResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{accountId}")
     public ResponseEntity updateUser(@PathVariable String accountId, @RequestBody AccountUpdateDTO accountUpdateDTO) {
         Account updatedAccount = this.accountLogic.updateUser(UUID.fromString(accountId),accountUpdateDTO);
@@ -75,6 +78,7 @@ public class AccountController {
         return new ResponseEntity<>(AccountResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity getAllUsers(@AuthenticationPrincipal UserDetails userDetails) {
         // IMPROVE METHOD
@@ -87,6 +91,7 @@ public class AccountController {
         return ResponseEntity.ok(userList);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getSingleUser/{accountId}")
     public ResponseEntity getSingleUserById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String accountId){
         // IMPROVE METHOD
@@ -99,6 +104,7 @@ public class AccountController {
         return ResponseEntity.ok(account);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteSingleUser/{accountId}")
     public ResponseEntity removeUserById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String accountId){
         // IMPROVE METHOD
