@@ -3,6 +3,7 @@ package nl.lunchtag.resource.Lunchtag.controller;
 import nl.lunchtag.resource.Lunchtag.entity.Account;
 import nl.lunchtag.resource.Lunchtag.logic.AccountLogic;
 import nl.lunchtag.resource.Lunchtag.logic.PasswordHelper;
+import nl.lunchtag.resource.Lunchtag.logic.mailservice.SendEmailService;
 import nl.lunchtag.resource.Lunchtag.models.LoginDTO;
 import nl.lunchtag.resource.Lunchtag.models.RegisterDTO;
 import nl.lunchtag.resource.Lunchtag.config.jwt.TokenProvider;
@@ -32,13 +33,15 @@ public class AuthController {
     private final AccountService accountService;
     private final PasswordHelper passwordHelper;
     private final AccountLogic accountLogic;
+    private final SendEmailService sendEmailService;
 
     @Autowired
-    public AuthController(TokenProvider tokenProvider, AccountService accountService, PasswordHelper passwordHelper, AccountLogic accountLogic) {
+    public AuthController(TokenProvider tokenProvider, AccountService accountService, PasswordHelper passwordHelper, AccountLogic accountLogic, SendEmailService emailService) {
         this.tokenProvider = tokenProvider;
         this.accountService = accountService;
         this.passwordHelper = passwordHelper;
         this.accountLogic = accountLogic;
+        this.sendEmailService = emailService;
     }
 
     @PostMapping("/pincode")
@@ -102,19 +105,20 @@ public class AuthController {
 
         try {
             Account user = new Account();
+            int pinCode = this.accountLogic.generatePincode();
 
             user.setEmail(registerModel.getEmail());
             user.setName(registerModel.getFirstName());
             user.setLastName(registerModel.getLastName());
             user.setPassword(passwordHelper.hash(registerModel.getPassword()));
-            user.setPincode(this.accountLogic.generatePincode());
-
+            user.setPincode(passwordHelper.hashPincoded(pinCode));
             Account createdUser = accountService.createOrUpdate(user);
 
             Map<Object, Object> model = new LinkedHashMap<>();
             model.put("token", tokenProvider.createToken(createdUser.getId(), createdUser.getName(), createdUser.getLastName(), createdUser.getRole()));
             model.put("user", createdUser);
-            model.put("pincode", createdUser.getPincode());
+
+            sendEmailService.SendEmail(registerModel.getEmail(), Integer.toString(pinCode));
             return ok(model);
         } catch(Exception ex) {
             return new ResponseEntity<>(AuthResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);

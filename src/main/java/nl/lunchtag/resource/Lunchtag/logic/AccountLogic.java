@@ -69,7 +69,7 @@ public class AccountLogic {
             }
 
             if(accountUpdateDTO.getPincode() != null) {
-                foundAccount.get().setPincode(accountUpdateDTO.getPincode());
+                foundAccount.get().setPincode(Integer.toString(accountUpdateDTO.getPincode()));
             }
 
             this.accountService.createOrUpdate(foundAccount.get());
