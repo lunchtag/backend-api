@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,7 @@ public class AdminController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK!, Succesfull")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/lunch/{accountId}")
     public ResponseEntity addLunch(@AuthenticationPrincipal Account account, @RequestBody LunchDTO lunchDTO, @PathVariable String accountId) {
         Lunch lunch = this.adminLogic.addLunch(accountId, lunchDTO);
@@ -48,6 +50,7 @@ public class AdminController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK!, Succesfull")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/lunch/{accountId}/{lunchId}")
     public ResponseEntity deleteLunch(@AuthenticationPrincipal Account account, @PathVariable String accountId, @PathVariable String lunchId){
         switch(this.adminLogic.deleteLunch(lunchId)) {

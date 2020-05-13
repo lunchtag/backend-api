@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,6 +50,7 @@ public class LunchController {
         return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "getLunchesByAccountId")
     @GetMapping("/account/{accountId}")
     public ResponseEntity getLunchesByAccount(@PathVariable String accountId) {
@@ -85,6 +87,7 @@ public class LunchController {
         return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "getGlobalLunches")
     @GetMapping("/all")
     public ResponseEntity getGlobalLunches() {
