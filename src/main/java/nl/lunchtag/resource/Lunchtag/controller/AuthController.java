@@ -1,8 +1,10 @@
 package nl.lunchtag.resource.Lunchtag.controller;
 
+import io.swagger.models.Response;
 import nl.lunchtag.resource.Lunchtag.entity.Account;
 import nl.lunchtag.resource.Lunchtag.logic.AccountLogic;
 import nl.lunchtag.resource.Lunchtag.logic.PasswordHelper;
+import nl.lunchtag.resource.Lunchtag.logic.mailservice.SendEmailService;
 import nl.lunchtag.resource.Lunchtag.models.LoginDTO;
 import nl.lunchtag.resource.Lunchtag.models.RegisterDTO;
 import nl.lunchtag.resource.Lunchtag.config.jwt.TokenProvider;
@@ -13,15 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -32,13 +34,15 @@ public class AuthController {
     private final AccountService accountService;
     private final PasswordHelper passwordHelper;
     private final AccountLogic accountLogic;
+    private final SendEmailService sendEmailService;
 
     @Autowired
-    public AuthController(TokenProvider tokenProvider, AccountService accountService, PasswordHelper passwordHelper, AccountLogic accountLogic) {
+    public AuthController(TokenProvider tokenProvider, AccountService accountService, PasswordHelper passwordHelper, AccountLogic accountLogic, SendEmailService emailService) {
         this.tokenProvider = tokenProvider;
         this.accountService = accountService;
         this.passwordHelper = passwordHelper;
         this.accountLogic = accountLogic;
+        this.sendEmailService = emailService;
     }
 
     @PostMapping("/pincode")
@@ -49,7 +53,7 @@ public class AuthController {
             return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
         }
 
-        if(!this.accountLogic.isPincodeMatch(pincodeModel.getPincode())) {
+        if(!this.accountLogic.isPincodeMatch(pincodeModel.getPincode(), user.get())) {
             return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
         }
 
@@ -102,19 +106,46 @@ public class AuthController {
 
         try {
             Account user = new Account();
+            int pinCode = this.accountLogic.generatePincode();
 
             user.setEmail(registerModel.getEmail());
             user.setName(registerModel.getFirstName());
             user.setLastName(registerModel.getLastName());
             user.setPassword(passwordHelper.hash(registerModel.getPassword()));
-            user.setPincode(this.accountLogic.generatePincode());
-
+            user.setPincode(passwordHelper.hashPincoded(pinCode));
             Account createdUser = accountService.createOrUpdate(user);
 
             Map<Object, Object> model = new LinkedHashMap<>();
             model.put("token", tokenProvider.createToken(createdUser.getId(), createdUser.getName(), createdUser.getLastName(), createdUser.getRole()));
             model.put("user", createdUser);
-            model.put("pincode", createdUser.getPincode());
+
+            sendEmailService.SendEmail(registerModel.getEmail(), Integer.toString(pinCode), false);
+            return ok(model);
+        } catch(Exception ex) {
+            return new ResponseEntity<>(AuthResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/updatePin")
+    public ResponseEntity updatePin(@AuthenticationPrincipal Account account) {
+        Optional<Account> user = accountService.findById(account.getId());
+
+        if(!user.isPresent()) {
+            return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            int pinCode = this.accountLogic.generatePincode();
+            Account changedUser = user.get();
+            changedUser.setPincode(Integer.toString(pinCode));
+            accountService.createOrUpdate(changedUser);
+
+            sendEmailService.SendEmail(changedUser.getEmail(), Integer.toString(pinCode), true);
+
+            Map<Object, Object> model = new LinkedHashMap<>();
+            model.put("token", tokenProvider.createToken(changedUser.getId(), changedUser.getName(), changedUser.getLastName(), changedUser.getRole()));
+            model.put("user", changedUser);
+
             return ok(model);
         } catch(Exception ex) {
             return new ResponseEntity<>(AuthResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);

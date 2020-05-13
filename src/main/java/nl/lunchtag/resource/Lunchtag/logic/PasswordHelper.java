@@ -49,4 +49,9 @@ public class PasswordHelper {
     public String hash(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());
     }
+
+    public String hashPincoded(int pinCode) {
+        String stringPinCode = Integer.toString(pinCode);
+        return BCrypt.hashpw(stringPinCode, BCrypt.gensalt());
+    }
 }
