@@ -78,7 +78,6 @@ public class AccountController {
         return new ResponseEntity<>(AccountResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public ResponseEntity getAllUsers(@AuthenticationPrincipal UserDetails userDetails) {
         // IMPROVE METHOD
@@ -113,7 +112,7 @@ public class AccountController {
         return ResponseEntity.ok("Deleted");
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/alluserlunches")
     public ResponseEntity getAllUserWithLunches(@AuthenticationPrincipal UserDetails userDetails){
         // IMPROVE METHOD
