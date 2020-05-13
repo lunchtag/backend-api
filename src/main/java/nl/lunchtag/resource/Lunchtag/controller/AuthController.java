@@ -1,5 +1,6 @@
 package nl.lunchtag.resource.Lunchtag.controller;
 
+import io.swagger.models.Response;
 import nl.lunchtag.resource.Lunchtag.entity.Account;
 import nl.lunchtag.resource.Lunchtag.logic.AccountLogic;
 import nl.lunchtag.resource.Lunchtag.logic.PasswordHelper;
@@ -14,15 +15,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -118,7 +119,33 @@ public class AuthController {
             model.put("token", tokenProvider.createToken(createdUser.getId(), createdUser.getName(), createdUser.getLastName(), createdUser.getRole()));
             model.put("user", createdUser);
 
-            sendEmailService.SendEmail(registerModel.getEmail(), Integer.toString(pinCode));
+            sendEmailService.SendEmail(registerModel.getEmail(), Integer.toString(pinCode), false);
+            return ok(model);
+        } catch(Exception ex) {
+            return new ResponseEntity<>(AuthResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/updatePin")
+    public ResponseEntity updatePin(@AuthenticationPrincipal Account account) {
+        Optional<Account> user = accountService.findById(account.getId());
+
+        if(!user.isPresent()) {
+            return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            int pinCode = this.accountLogic.generatePincode();
+            Account changedUser = user.get();
+            changedUser.setPincode(Integer.toString(pinCode));
+            accountService.createOrUpdate(changedUser);
+
+            sendEmailService.SendEmail(changedUser.getEmail(), Integer.toString(pinCode), true);
+
+            Map<Object, Object> model = new LinkedHashMap<>();
+            model.put("token", tokenProvider.createToken(changedUser.getId(), changedUser.getName(), changedUser.getLastName(), changedUser.getRole()));
+            model.put("user", changedUser);
+
             return ok(model);
         } catch(Exception ex) {
             return new ResponseEntity<>(AuthResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
