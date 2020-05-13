@@ -14,10 +14,12 @@ import java.util.UUID;
 @Component
 public class AccountLogic {
     private final AccountService accountService;
+    private final PasswordHelper passwordHelper;
 
     @Autowired
-    public AccountLogic(AccountService accountService) {
+    public AccountLogic(AccountService accountService, PasswordHelper passwordHelper) {
         this.accountService = accountService;
+        this.passwordHelper = passwordHelper;
     }
 
     public Integer generatePincode() {
@@ -29,10 +31,12 @@ public class AccountLogic {
         return Integer.parseInt(formatted);
     }
 
-    public Boolean isPincodeMatch(Integer pincode) {
-        Optional<Account> foundAccount = this.accountService.findByPincode(pincode);
+    public Boolean isPincodeMatch(Integer pincode, Account user) {
+        if(passwordHelper.isMatch(Integer.toString(pincode), user.getPincode())){
+            return true;
+        }
 
-        return foundAccount.isPresent();
+        return false;
     }
 
     public Optional<Account> findById(UUID accountId) {

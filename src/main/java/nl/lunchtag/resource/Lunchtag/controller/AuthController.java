@@ -52,7 +52,7 @@ public class AuthController {
             return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
         }
 
-        if(!this.accountLogic.isPincodeMatch(pincodeModel.getPincode())) {
+        if(!this.accountLogic.isPincodeMatch(pincodeModel.getPincode(), user.get())) {
             return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
         }
 
