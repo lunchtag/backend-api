@@ -119,12 +119,15 @@ public class LunchController {
     @ApiOperation(value = "GetLunchOverviewMonth")
     @GetMapping("/export/{year}/{month}")
     public ResponseEntity getLunchOverviewMonth(@PathVariable String year, @PathVariable String month) {
-        List<Lunch> lunches = this.lunchLogic.findAll();
-        this.lunchLogic.generatePdf(Integer.parseInt(year),Integer.parseInt(month));
-        if(!lunches.isEmpty()) {
-            return ResponseEntity.ok(lunches);
+        int monthNumber = Integer.parseInt(month);
+        monthNumber++;
+        try{
+            this.lunchLogic.generatePdf(Integer.parseInt(year),Integer.parseInt(month));
+            return ResponseEntity.ok("/files/Maandoverzicht/"+year+"/"+monthNumber);
+        }catch(Exception e){
+            return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
+
     }
 }

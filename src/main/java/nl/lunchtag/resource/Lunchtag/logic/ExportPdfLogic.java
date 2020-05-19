@@ -29,17 +29,9 @@ public class ExportPdfLogic {
                 filteredLunches.add(lunch);
             }
         }
-
-
-
         // lijst sorteren
         filteredLunches.sort(Comparator.comparing(l -> l.getDate()));
         System.out.println("");
         return filteredLunches;
     }
-
-    public void uploadFile(){
-
-    }
-
 }
