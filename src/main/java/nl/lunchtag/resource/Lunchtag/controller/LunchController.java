@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiResponses;
 import nl.lunchtag.resource.Lunchtag.controller.enums.LunchResponse;
 import nl.lunchtag.resource.Lunchtag.entity.Account;
 import nl.lunchtag.resource.Lunchtag.entity.Lunch;
+import nl.lunchtag.resource.Lunchtag.logic.ExportPdfLogic;
 import nl.lunchtag.resource.Lunchtag.logic.LunchLogic;
 import nl.lunchtag.resource.Lunchtag.models.LunchDTO;
 import org.slf4j.Logger;
@@ -110,5 +111,17 @@ public class LunchController {
         }
 
         return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ApiOperation(value = "GetLunchOverviewMonth")
+    @GetMapping("/export/{year}/{month}")
+    public ResponseEntity getLunchOverviewMonth(@PathVariable String year, @PathVariable String month) {
+        List<Lunch> lunches = this.lunchLogic.findAll();
+        this.lunchLogic.generatePdf(Integer.parseInt(year),Integer.parseInt(month));
+        if(!lunches.isEmpty()) {
+            return ResponseEntity.ok(lunches);
+        }
+
+        return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
     }
 }
