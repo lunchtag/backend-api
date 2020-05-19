@@ -11,4 +11,5 @@ public class LunchtagApplication {
 		SpringApplication.run(LunchtagApplication.class, args);
 	}
 
+
 }
