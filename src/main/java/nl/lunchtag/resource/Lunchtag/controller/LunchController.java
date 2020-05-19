@@ -127,7 +127,5 @@ public class LunchController {
         }catch(Exception e){
             return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
         }
-
-
     }
 }
