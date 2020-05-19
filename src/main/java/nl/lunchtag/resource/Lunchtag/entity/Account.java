@@ -34,7 +34,7 @@ public class Account extends BaseId implements UserDetails, Serializable {
     private String password;
 
     @JsonIgnore
-    private Integer pincode;
+    private String pincode;
 
     private Boolean isNonLocked = true;
 
