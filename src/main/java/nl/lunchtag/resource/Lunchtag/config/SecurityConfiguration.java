@@ -42,7 +42,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers("/v2/api-docs/**").permitAll()
                     .antMatchers("/webjars/**").permitAll()
                     .antMatchers("/auth/**").permitAll()
-                    .antMatchers("/files/**").authenticated()
+                    .antMatchers("/files/**").hasRole("ADMIN")
 
                 .anyRequest().authenticated()
                 .and()
