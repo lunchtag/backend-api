@@ -146,7 +146,7 @@
 			<artifactId>mssql-jdbc</artifactId>
 			<version>6.4.0.jre8</version><!--$NO-MVN-MAN-VER$-->
 		</dependency>
-    
+
 		<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
 		<dependency>
 			<groupId>com.itextpdf</groupId>
@@ -156,7 +156,7 @@
 
 	</dependencies>
 
-  
+
 
 	<build>
 		<plugins>
