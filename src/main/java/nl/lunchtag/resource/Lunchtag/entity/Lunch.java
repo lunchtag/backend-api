@@ -2,11 +2,13 @@ package nl.lunchtag.resource.Lunchtag.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.lunchtag.resource.Lunchtag.entity.entity_logger_listeners.LunchLoggerListener;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+@EntityListeners(LunchLoggerListener.class)
 @Entity
 @Getter
 @Setter

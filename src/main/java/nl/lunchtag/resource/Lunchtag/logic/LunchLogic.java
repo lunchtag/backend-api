@@ -1,7 +1,6 @@
 package nl.lunchtag.resource.Lunchtag.logic;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfName;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
