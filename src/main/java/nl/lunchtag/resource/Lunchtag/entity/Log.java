@@ -1,19 +1,24 @@
 package nl.lunchtag.resource.Lunchtag.entity;
 
-import lombok.NoArgsConstructor;
+import lombok.*;
 import nl.lunchtag.resource.Lunchtag.entity.enums.LogType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
-@NoArgsConstructor
+@Getter
+@Setter
 @Entity
-public class Log extends BaseId{
+public class Log extends BaseId implements Serializable {
 
     public Log(String logText, Account user, LogType logType) {
         this.logText = logText;
         this.user = user;
         this.logType = logType;
+    }
+
+    public Log() {
     }
 
     private String logText;

@@ -7,6 +7,8 @@ import nl.lunchtag.resource.Lunchtag.respository.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class LogService {
 
@@ -20,5 +22,10 @@ public class LogService {
     public void addLog(String logText, Account account, LogType logType){
         Log log = new Log(logText, account, logType);
         logRepository.save(log);
+    }
+
+    public List<Log> getAllLogs(){
+        List<Log> logs = logRepository.findAll();
+        return logs;
     }
 }
