@@ -111,7 +111,7 @@ public class LunchLogic {
             // Add objects to pdf
             document.add(table);
 
-            Paragraph lunchTitle = new Paragraph("Totaal aantal x meegelunched:" + filteredLunches.size(),titleFont);
+            Paragraph lunchTitle = new Paragraph("Totaal "+ filteredLunches.size()+" keer meegelunched:" ,titleFont);
             lunchTitle.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(lunchTitle);
 
