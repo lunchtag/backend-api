@@ -61,7 +61,7 @@ public class AccountLogic {
 
         if(foundAccount.isPresent()) {
             if(accountUpdateDTO.getPassword() != null) {
-                foundAccount.get().setPassword(accountUpdateDTO.getPassword());
+                foundAccount.get().setPassword(passwordHelper.hash(accountUpdateDTO.getPassword()));
             }
 
             if(accountUpdateDTO.getFirstName() != null) {

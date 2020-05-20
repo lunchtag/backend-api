@@ -29,115 +29,110 @@ import java.util.UUID;
 @RequestMapping(value = "/lunch")
 @RestController
 public class LunchController {
-    private Logger logger = LoggerFactory.getLogger(LunchController.class);
+        private Logger logger = LoggerFactory.getLogger(LunchController.class);
 
-    private LunchLogic lunchLogic;
+        private LunchLogic lunchLogic;
 
-    @Autowired
-    public LunchController(LunchLogic lunchLogic) {
-        this.lunchLogic = lunchLogic;
-    }
+        // Add empty constructor for testing
+        public LunchController() {}
 
-    @ApiOperation(value = "AddLunch")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK!, Succesfull")
-    })
-    @PostMapping
-    public ResponseEntity addLunch(@AuthenticationPrincipal Account account, @RequestBody LunchDTO lunchDTO) {
-        Lunch lunch = this.lunchLogic.addLunch(account, lunchDTO);
-
-        if(lunch != null) {
-            return ResponseEntity.ok(lunch);
+        @Autowired
+        public LunchController(LunchLogic lunchLogic) {
+            this.lunchLogic = lunchLogic;
         }
 
-        return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
-    }
+        @ApiOperation(value = "AddLunch")
+        @ApiResponses(value = {
+                @ApiResponse(code = 200, message = "OK!, Succesfull")
+        })
+        @PostMapping
+        public ResponseEntity addLunch(@AuthenticationPrincipal Account account, @RequestBody LunchDTO lunchDTO) {
+            Lunch lunch = this.lunchLogic.addLunch(account, lunchDTO);
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @ApiOperation(value = "getLunchesByAccountId")
-    @GetMapping("/account/{accountId}")
-    public ResponseEntity getLunchesByAccount(@PathVariable String accountId) {
-        List<Lunch> lunches = this.lunchLogic.findAllByAccountId(UUID.fromString(accountId));
-
-        if(!lunches.isEmpty()) {
-            return ResponseEntity.ok(lunches);
-        }
-
-        return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ApiOperation(value = "getLunch")
-    @GetMapping("/{lunchId}")
-    public ResponseEntity getLunch(@PathVariable String lunchId) {
-        Optional<Lunch> lunch = this.lunchLogic.findById(UUID.fromString(lunchId));
-
-        if(lunch.isPresent()) {
-            return ResponseEntity.ok(lunch.get());
-        }
-
-        return new ResponseEntity<>(LunchResponse.NO_LUNCH.toString(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ApiOperation(value = "GetAllLunches")
-    @GetMapping
-    public ResponseEntity getAllLunches(@AuthenticationPrincipal Account account) {
-        List<Lunch> lunches = this.lunchLogic.findAllByAccountId(account.getId());
-
-        if(!lunches.isEmpty()) {
-            return ResponseEntity.ok(lunches);
-        }
-
-        return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @ApiOperation(value = "getGlobalLunches")
-    @GetMapping("/all")
-    public ResponseEntity getGlobalLunches() {
-        List<Lunch> lunches = this.lunchLogic.findAll();
-
-        if(!lunches.isEmpty()) {
-            return ResponseEntity.ok(lunches);
-        }
-
-        return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
-    }
-
-    @ApiOperation(value = "RemoveLunch")
-    @DeleteMapping("/{lunchId}")
-    public ResponseEntity removeLunch(@AuthenticationPrincipal Account account, @PathVariable String lunchId) {
-        try {
-            if (lunchLogic.deleteLunch(UUID.fromString(lunchId))) {
-                return ResponseEntity.ok("Deleted");
+            if(lunch != null) {
+                return ResponseEntity.ok(lunch);
             }
-        } catch(Exception e) {
-            logger.error("User {} gave error {}", account.getEmail(), e);
+
             return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
-    }
+        @PreAuthorize("hasRole('ADMIN')")
+        @ApiOperation(value = "getLunchesByAccountId")
+        @GetMapping("/account/{accountId}")
+        public ResponseEntity getLunchesByAccount(@PathVariable String accountId) {
+            List<Lunch> lunches = this.lunchLogic.findAllByAccountId(UUID.fromString(accountId));
 
-    @ApiOperation(value = "GetLunchOverviewMonth")
-    @GetMapping("/export/{year}/{month}")
-    public ResponseEntity getLunchOverviewMonth(@PathVariable String year, @PathVariable String month) {
-        try{
+            if(!lunches.isEmpty()) {
+                return ResponseEntity.ok(lunches);
+            }
+
+            return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        @ApiOperation(value = "getLunch")
+        @GetMapping("/{lunchId}")
+        public ResponseEntity getLunch(@PathVariable String lunchId) {
+            Optional<Lunch> lunch = this.lunchLogic.findById(UUID.fromString(lunchId));
+
+            if(lunch.isPresent()) {
+                return ResponseEntity.ok(lunch.get());
+            }
+
+            return new ResponseEntity<>(LunchResponse.NO_LUNCH.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        @ApiOperation(value = "GetAllLunches")
+        @GetMapping
+        public ResponseEntity getAllLunches(@AuthenticationPrincipal Account account) {
+            List<Lunch> lunches = this.lunchLogic.findAllByAccountId(account.getId());
+
+            if(!lunches.isEmpty()) {
+                return ResponseEntity.ok(lunches);
+            }
+
+            return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        @PreAuthorize("hasRole('ADMIN')")
+        @ApiOperation(value = "getGlobalLunches")
+        @GetMapping("/all")
+        public ResponseEntity getGlobalLunches() {
+            List<Lunch> lunches = this.lunchLogic.findAll();
+
+            if(!lunches.isEmpty()) {
+                return ResponseEntity.ok(lunches);
+            }
+
+            return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        @ApiOperation(value = "RemoveLunch")
+        @DeleteMapping("/{lunchId}")
+        public ResponseEntity removeLunch(@AuthenticationPrincipal Account account, @PathVariable String lunchId) {
+            try {
+                if (lunchLogic.deleteLunch(UUID.fromString(lunchId))) {
+                    return ResponseEntity.ok("Deleted");
+                }
+            } catch(Exception e) {
+                logger.error("User {} gave error {}", account.getEmail(), e);
+                return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
+            }
+
+            return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        @ApiOperation(value = "GetLunchOverviewMonth")
+        @GetMapping("/export/{year}/{month}")
+        public ResponseEntity getLunchOverviewMonth(@PathVariable String year, @PathVariable String month) {
             int monthNumber = Integer.parseInt(month);
             monthNumber++;
-            byte[] contents =  this.lunchLogic.generatePdf(Integer.parseInt(year),Integer.parseInt(month));
-            String filename = "Maandoverzicht-" + year + "-" + monthNumber+".pdf";
+            try{
+                this.lunchLogic.generatePdf(Integer.parseInt(year),Integer.parseInt(month));
+                return ResponseEntity.ok("/files/Maandoverzicht/"+year+"/"+monthNumber);
+            }catch(Exception e){
+                return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
+            }
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_PDF);
-            // Here you have to set the actual filename of your pdf
-            headers.setContentDispositionFormData(filename, filename);
-            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-            return new ResponseEntity<>(contents, headers, HttpStatus.OK);
 
-        }catch(Exception e){
-            return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
         }
-
-
-    }
 }
