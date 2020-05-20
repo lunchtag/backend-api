@@ -121,18 +121,25 @@ public class LunchController {
             return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
         }
 
-        @ApiOperation(value = "GetLunchOverviewMonth")
-        @GetMapping("/export/{year}/{month}")
-        public ResponseEntity getLunchOverviewMonth(@PathVariable String year, @PathVariable String month) {
+    @ApiOperation(value = "GetLunchOverviewMonth")
+    @GetMapping("/export/{year}/{month}")
+    public ResponseEntity getLunchOverviewMonth(@PathVariable String year, @PathVariable String month) {
+        try{
             int monthNumber = Integer.parseInt(month);
             monthNumber++;
-            try{
-                this.lunchLogic.generatePdf(Integer.parseInt(year),Integer.parseInt(month));
-                return ResponseEntity.ok("/files/Maandoverzicht/"+year+"/"+monthNumber);
-            }catch(Exception e){
-                return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
-            }
 
+            byte[] contents =  this.lunchLogic.generatePdf(Integer.parseInt(year),Integer.parseInt(month));
+            String filename = "Maandoverzicht-" + year + "-" + monthNumber+".pdf";
 
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            // Here you have to set the actual filename of your pdf
+            headers.setContentDispositionFormData(filename, filename);
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+            return new ResponseEntity<>(contents, headers, HttpStatus.OK);
+
+        }catch(Exception e){
+            return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
         }
+    }
 }
