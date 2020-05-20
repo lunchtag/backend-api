@@ -13,10 +13,7 @@ import nl.lunchtag.resource.Lunchtag.service.LunchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -69,15 +66,15 @@ public class LunchLogic {
         return this.lunchService.findById(id);
     }
 
-    public void generatePdf(int year,int month){
+    public byte[] generatePdf(int year,int month){
         List<Lunch> lunches = lunchService.findAll();
         List<Lunch> filteredLunches = exportPdfLogic.returnLunchesOfMonth(month,year,lunches);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
         Document document = new Document();
 
         try{
-            String path = new File(".").getCanonicalPath() + "/src/main/webapp/WEB-INF/files/";
-
-            PdfWriter writer = PdfWriter.getInstance(document,new FileOutputStream(path+"Maandoverzicht-"+year+"-"+(month+1)+".pdf"));
+            PdfWriter writer = PdfWriter.getInstance(document,byteArrayOutputStream);
             document.open();
             Font titleFont=new Font(Font.FontFamily.HELVETICA,25.0f,Font.BOLD, BaseColor.BLACK);
             Font tableFont = new Font(Font.FontFamily.HELVETICA, 18.0f,Font.BOLD, BaseColor.BLACK);
@@ -95,7 +92,6 @@ public class LunchLogic {
             PdfPCell c1 = new PdfPCell(new Paragraph("Voornaam",tableFont));
             PdfPCell c2 = new PdfPCell(new Paragraph("Achternaam",tableFont));
             PdfPCell c3 = new PdfPCell(new Paragraph("Datum",tableFont));
-//            PdfPCell c4 = new PdfPCell(new Paragraph("Aantal x gelunched",tableFont));
 
             // Add cell to table
             table.addCell(c1);
@@ -117,20 +113,17 @@ public class LunchLogic {
 
             Paragraph lunchTitle = new Paragraph("Totaal aantal x meegelunched:" + filteredLunches.size(),titleFont);
             lunchTitle.setAlignment(Paragraph.ALIGN_CENTER);
-
-
             document.add(lunchTitle);
+
             // Close
             document.close();
             writer.close();
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
+            byte[] pdfBytes = byteArrayOutputStream.toByteArray();
+
+            return pdfBytes;
         } catch (DocumentException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
-        System.out.println("");
+        return null;
     }
 }

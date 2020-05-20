@@ -13,7 +13,9 @@ import nl.lunchtag.resource.Lunchtag.models.LunchDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -119,13 +121,21 @@ public class LunchController {
     @ApiOperation(value = "GetLunchOverviewMonth")
     @GetMapping("/export/{year}/{month}")
     public ResponseEntity getLunchOverviewMonth(@PathVariable String year, @PathVariable String month) {
-        int monthNumber = Integer.parseInt(month);
-        monthNumber++;
         try{
-            this.lunchLogic.generatePdf(Integer.parseInt(year),Integer.parseInt(month));
-            return ResponseEntity.ok("/files/Maandoverzicht/"+year+"/"+monthNumber);
+            int monthNumber = Integer.parseInt(month);
+            monthNumber++;
+            byte[] contents =  this.lunchLogic.generatePdf(Integer.parseInt(year),Integer.parseInt(month));
+            String filename = "Maandoverzicht-" + year + "-" + monthNumber+".pdf";
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            // Here you have to set the actual filename of your pdf
+            headers.setContentDispositionFormData(filename, filename);
+            headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+            return new ResponseEntity<>(contents, headers, HttpStatus.OK);
+
         }catch(Exception e){
-            return new ResponseEntity<>(LunchResponse.NO_LUNCHES.toString(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(LunchResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
         }
 
 

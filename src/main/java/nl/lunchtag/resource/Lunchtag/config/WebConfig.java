@@ -1,12 +1,8 @@
 package nl.lunchtag.resource.Lunchtag.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.CacheControl;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -16,10 +12,4 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**").allowedOrigins("*").allowedHeaders("*").allowedMethods("*");
     }
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Register resource handler for files
-        registry.addResourceHandler("/files/**").addResourceLocations("/WEB-INF/files/")
-                .setCacheControl(CacheControl.maxAge(2, TimeUnit.HOURS).cachePublic());
-    }
 }
