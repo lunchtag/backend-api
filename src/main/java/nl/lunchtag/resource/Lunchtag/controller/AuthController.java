@@ -16,14 +16,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -137,7 +134,7 @@ public class AuthController {
         try {
             int pinCode = this.accountLogic.generatePincode();
             Account changedUser = user.get();
-            changedUser.setPincode(Integer.toString(pinCode));
+            changedUser.setPincode(passwordHelper.hashPincoded(pinCode));
             accountService.createOrUpdate(changedUser);
 
             sendEmailService.SendEmail(changedUser.getEmail(), Integer.toString(pinCode), true);
