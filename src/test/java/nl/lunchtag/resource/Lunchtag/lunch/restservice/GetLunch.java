@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
-public class GetLunch {
+class GetLunch {
     @InjectMocks
     private LunchController lunchController;
 
@@ -28,14 +28,16 @@ public class GetLunch {
     @BeforeEach
     void setUp() {
         Account account = new Account(UUID.fromString("123e4567-e89b-42d3-a456-556642440010"));
+
         Lunch lunch = new Lunch(new Date(), account);
+        lunch.setId(UUID.fromString("123e4567-e89b-42d3-a456-556642440000"));
 
         List<Lunch> lunches = new ArrayList<>();
         lunches.add(lunch);
 
-        lenient().when(lunchLogic.findById(UUID.fromString("123e4567-e89b-42d3-a456-556642440000"))).thenReturn(Optional.of(lunch));
+        lenient().when(lunchLogic.findById(lunch.getId())).thenReturn(Optional.of(lunch));
+        lenient().when(lunchLogic.findAllByAccountId(account.getId())).thenReturn(lunches);
         lenient().when(lunchLogic.findAll()).thenReturn(lunches);
-
     }
 
     @Test
@@ -50,5 +52,21 @@ public class GetLunch {
         assertEquals(400, status.value());
     }
 
+    @Test
+    void findAllLunches() {
+        HttpStatus status = lunchController.getGlobalLunches().getStatusCode();
+        assertEquals(200, status.value());
+    }
 
+    @Test
+    void findAllLunchedByCorrectAccountId() {
+        HttpStatus status = lunchController.getLunchesByAccount("123e4567-e89b-42d3-a456-556642440010").getStatusCode();
+        assertEquals(200, status.value());
+    }
+
+    @Test
+    void findAllLunchesByIncorrectAccountId() {
+        HttpStatus status = lunchController.getLunchesByAccount("123e4203-e89b-42d3-a456-556642440010").getStatusCode();
+        assertEquals(400, status.value());
+    }
 }
