@@ -20,11 +20,11 @@ public class LunchLoggerListener {
 
     @PrePersist
     public void prePersist(Lunch lunch){
-        logLogic.addCreateLog("Lunch added");
+        logLogic.addCreateLog(String.format("Lunch added with date %s", lunch.getDate()));
     }
 
     @PreRemove
     public void preDelete(Lunch lunch){
-        logLogic.addDeleteLog("Lunch deleted");
+        logLogic.addDeleteLog(String.format("Lunch deleted with date %s", lunch.getDate()));
     }
 }

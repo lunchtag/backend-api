@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.lunchtag.resource.Lunchtag.entity.entity_logger_listeners.AccountLoggerListener;
 import nl.lunchtag.resource.Lunchtag.entity.enums.Role;
 import org.apache.commons.lang3.RandomUtils;
 import org.hibernate.annotations.Type;
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@EntityListeners(AccountLoggerListener.class)
 @Getter
 @Setter
 @Entity
