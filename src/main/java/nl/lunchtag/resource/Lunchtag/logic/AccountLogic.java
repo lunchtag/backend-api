@@ -46,8 +46,14 @@ public class AccountLogic {
     public Boolean disableAccount(UUID accountId) {
         Optional<Account> account = this.findById(accountId);
 
+        boolean nonLocked = true;
+
         if(account.isPresent()) {
-            account.get().setIsNonLocked(false);
+            if(account.get().getIsNonLocked()) {
+                nonLocked = false;
+            }
+
+            account.get().setIsNonLocked(nonLocked);
             this.accountService.createOrUpdate(account.get());
 
             return true;
