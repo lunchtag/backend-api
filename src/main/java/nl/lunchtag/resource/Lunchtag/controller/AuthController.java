@@ -11,6 +11,7 @@ import nl.lunchtag.resource.Lunchtag.config.jwt.TokenProvider;
 import nl.lunchtag.resource.Lunchtag.logic.Exceptions.AuthResponse;
 import nl.lunchtag.resource.Lunchtag.models.pincodeDTO;
 import nl.lunchtag.resource.Lunchtag.service.AccountService;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,14 +71,14 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity login(@Valid @RequestBody LoginDTO loginModel) {
-        Optional<Account> user = accountService.findAccountByEmail(loginModel.getEmail());
+        Optional<Account> user = accountService.findAccountByEmail(Jsoup.parse(loginModel.getEmail()).text());
 
         if(!user.isPresent()) {
             return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
         }
 
         String password = user.get().getPassword();
-        if(!this.passwordHelper.isMatch(loginModel.getPassword(), password)) {
+        if(!this.passwordHelper.isMatch(Jsoup.parse(loginModel.getPassword()).text(), password)) {
             return new ResponseEntity<>(AuthResponse.WRONG_CREDENTIALS.toString(), HttpStatus.BAD_REQUEST);
         }
 
@@ -105,10 +106,10 @@ public class AuthController {
             Account user = new Account();
             int pinCode = this.accountLogic.generatePincode();
 
-            user.setEmail(registerModel.getEmail());
-            user.setName(registerModel.getFirstName());
-            user.setLastName(registerModel.getLastName());
-            user.setPassword(passwordHelper.hash(registerModel.getPassword()));
+            user.setEmail(Jsoup.parse(registerModel.getEmail()).text());
+            user.setName(Jsoup.parse(registerModel.getFirstName()).text());
+            user.setLastName(Jsoup.parse(registerModel.getLastName()).text());
+            user.setPassword(passwordHelper.hash(Jsoup.parse(registerModel.getPassword()).text()));
             user.setPincode(passwordHelper.hashPincoded(pinCode));
             Account createdUser = accountService.createOrUpdate(user);
 
@@ -116,7 +117,7 @@ public class AuthController {
             model.put("token", tokenProvider.createToken(createdUser.getId(), createdUser.getName(), createdUser.getLastName(), createdUser.getRole()));
             model.put("user", createdUser);
 
-            sendEmailService.SendEmail(registerModel.getEmail(), Integer.toString(pinCode), false);
+            sendEmailService.SendEmail(createdUser.getEmail(), Integer.toString(pinCode), false);
             return ok(model);
         } catch(Exception ex) {
             return new ResponseEntity<>(AuthResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);

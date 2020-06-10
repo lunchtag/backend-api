@@ -3,6 +3,7 @@ package nl.lunchtag.resource.Lunchtag.logic;
 import nl.lunchtag.resource.Lunchtag.entity.Account;
 import nl.lunchtag.resource.Lunchtag.models.AccountUpdateDTO;
 import nl.lunchtag.resource.Lunchtag.service.AccountService;
+import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
@@ -67,19 +68,19 @@ public class AccountLogic {
 
         if(foundAccount.isPresent()) {
             if(accountUpdateDTO.getPassword() != null) {
-                foundAccount.get().setPassword(passwordHelper.hash(accountUpdateDTO.getPassword()));
+                foundAccount.get().setPassword(passwordHelper.hash(Jsoup.parse(accountUpdateDTO.getPassword()).text()));
             }
 
             if(accountUpdateDTO.getFirstName() != null) {
-                foundAccount.get().setName(accountUpdateDTO.getFirstName());
+                foundAccount.get().setName(Jsoup.parse(accountUpdateDTO.getFirstName()).text());
             }
 
             if(accountUpdateDTO.getLastName() != null) {
-                foundAccount.get().setLastName(accountUpdateDTO.getLastName());
+                foundAccount.get().setLastName(Jsoup.parse(accountUpdateDTO.getLastName()).text());
             }
 
             if(accountUpdateDTO.getPincode() != null) {
-                foundAccount.get().setPincode(Integer.toString(accountUpdateDTO.getPincode()));
+                foundAccount.get().setPincode(passwordHelper.hash(Jsoup.parse(Integer.toString(accountUpdateDTO.getPincode())).text()));
             }
 
             this.accountService.createOrUpdate(foundAccount.get());
