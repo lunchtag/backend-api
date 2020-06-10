@@ -80,7 +80,6 @@ public class AccountController {
 
     @GetMapping("/all")
     public ResponseEntity getAllUsers(@AuthenticationPrincipal UserDetails userDetails) {
-        // IMPROVE METHOD
         List<Account> userList = accountService.getAllUsers();
 
         if(userList.isEmpty()){
@@ -93,7 +92,6 @@ public class AccountController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getSingleUser/{accountId}")
     public ResponseEntity getSingleUserById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String accountId){
-        // IMPROVE METHOD
         Account account = accountService.getUserById(UUID.fromString(accountId));
 
         if(account == null){
@@ -106,7 +104,6 @@ public class AccountController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteSingleUser/{accountId}")
     public ResponseEntity removeUserById(@AuthenticationPrincipal UserDetails userDetails, @PathVariable String accountId){
-        // IMPROVE METHOD
         accountService.removeUserById(UUID.fromString(accountId));
 
         return ResponseEntity.ok("Deleted");
@@ -115,7 +112,6 @@ public class AccountController {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/alluserlunches")
     public ResponseEntity getAllUserWithLunches(@AuthenticationPrincipal UserDetails userDetails){
-        // IMPROVE METHOD
         List<Account> userList = accountService.getAllUsers();
         if(userList.isEmpty()){
             return new ResponseEntity<>(AccountResponse.UNEXPECTED_ERROR.toString(), HttpStatus.BAD_REQUEST);
