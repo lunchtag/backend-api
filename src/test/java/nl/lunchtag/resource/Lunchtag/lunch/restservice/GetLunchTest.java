@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
-class GetLunch {
+class GetLunchTest {
     @InjectMocks
     private LunchController lunchController;
 

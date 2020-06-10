@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class AddLunch {
+class AddLunchTest {
     @InjectMocks
     private LunchController lunchController;
 
