@@ -5,7 +5,6 @@ import nl.lunchtag.resource.Lunchtag.models.AccountUpdateDTO;
 import nl.lunchtag.resource.Lunchtag.service.AccountService;
 import org.jsoup.Jsoup;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
